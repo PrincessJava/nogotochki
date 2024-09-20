@@ -1,4 +1,4 @@
-package ru.riton.ru.riton.model
+package ru.riton.ru.riton.model.enums
 
 enum class HandlerName(val text: String) {
     MAIN_MENU("main_menu"),

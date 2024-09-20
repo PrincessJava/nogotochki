@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.createMessageWithInlineButtons
-import ru.riton.ru.riton.model.CommandName
-import ru.riton.ru.riton.model.HandlerName
+import ru.riton.ru.riton.model.enums.CommandName
+import ru.riton.ru.riton.model.enums.HandlerName
 import java.time.LocalTime
 import kotlin.random.Random
 

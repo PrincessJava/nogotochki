@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="create_table_payment" author="riton">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="payment">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_payment_user" references="user(id)"/>
+            </column>
+            <column name="subscription_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_payment_employee" references="subscription(id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="payment"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,4 +1,4 @@
-package ru.riton.ru.riton.model
+package ru.riton.ru.riton.model.enums
 
 enum class CommandName(val text: String) {
     START("start"),

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="create_table_slot" author="riton">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="slot"/>
+            </not>
+        </preConditions>
+        <createTable tableName="slot">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="master_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_slot_masters" references="masters(id)"/>
+            </column>
+            <column name="start" type="timestamp"/>
+            <column name="end" type="timestamp"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="slot"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

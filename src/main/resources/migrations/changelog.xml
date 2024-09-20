@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <!-- Should be only links to per-version cumulative changelog files. -->
+    <include file="changelog-v1-create_table_organisation.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v2-create_table_user.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v3-create_table_admin.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v4-create_table_masters.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v5-create_table_subscription.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v6-create_table_payment.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v7-create_table_slot.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v8-create_table_appointment.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

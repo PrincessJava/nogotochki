@@ -2,3 +2,19 @@ telegram:
   bot-id: 0
   bot-token: 7237232815:AAH0oXQVH196J0ji85ulH4A2KqVDfG3cZLQ
   bot-username: disposer_bot
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/nogotochki
+    password: riton
+    username: riton
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:migrations/changelog.xml
+    enabled: true

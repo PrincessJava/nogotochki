@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.NogotochkiBot
-import ru.riton.ru.riton.model.HandlerName
+import ru.riton.ru.riton.model.enums.HandlerName
 
 @Component
 class MainMenuHandler(private val applicationContext: ApplicationContext) : CallbackHandler {
