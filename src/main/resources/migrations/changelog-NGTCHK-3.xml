@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+
+    <changeSet id="drop_table_admin" author="riton">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="admin"/>
+        </preConditions>
+        <dropTable tableName="admin"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="add_user_password" author="riton">
+        <preConditions>
+            <not>
+                <columnExists tableName="user" columnName="password"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="user">
+            <column name="password" type="text"></column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -9,32 +9,23 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="create_table_masters" author="riton">
+    <changeSet id="create_table_role" author="riton">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="masters"/>
+                <tableExists tableName="role"/>
             </not>
         </preConditions>
-        <createTable tableName="masters">
+        <createTable tableName="role">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="version" type="bigint">
+            <column name="name" type="varchar(24)">
                 <constraints nullable="false"/>
-            </column>
-            <column name="created" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modified" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="varchar(50)"/>
-            <column name="org_id" type="int">
-                <constraints nullable="false" foreignKeyName="fk_masters_organisation" references="organisation(id)"/>
             </column>
         </createTable>
         <rollback>
-            <dropTable tableName="masters"/>
+            <dropTable tableName="role"/>
         </rollback>
     </changeSet>
+
 </databaseChangeLog>

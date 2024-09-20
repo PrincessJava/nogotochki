@@ -13,20 +13,20 @@ import java.util.*
 open class BasicEntity(
 
     @Version
-    var version: Long = 1L,
+    open var version: Long = 1L,
 
     @CreatedDate
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
-    var created: Date = Date(),
+    open var created: Date = Date(),
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    var modified: Date = Date(),
+    open var modified: Date = Date(),
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Int = 0
+    open var id: Int = 0
 
 ) : Serializable

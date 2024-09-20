@@ -7,6 +7,7 @@ plugins {
     id("org.springframework.boot") version "3.3.1"
     id("io.spring.dependency-management") version "1.1.6"
     id("org.liquibase.gradle") version "2.2.2"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.0.20"
 }
 
 group = "ru.riton"
@@ -25,6 +26,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
 
+    //security
+    implementation("org.springframework.security:spring-security-core:6.3.3")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.3.4")
+
     //database
     implementation("org.postgresql:postgresql:42.7.3")
     liquibaseRuntime("org.postgresql:postgresql")
@@ -40,6 +45,8 @@ dependencies {
     implementation("org.telegram:telegrambotsextensions:6.9.7.1")
 //    implementation("org.telegram:telegrambots-meta:7.7.0")
 
+    implementation("org.jetbrains.kotlin.plugin.allopen:org.jetbrains.kotlin.plugin.allopen.gradle.plugin:2.0.20")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
@@ -48,4 +55,8 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(17)
+}
+
+allOpen {
+    annotation("jakarta.persistence.Entity")
 }

@@ -19,6 +19,15 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="version" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
             <column name="name" type="varchar(200)"/>
             <column name="tg_id" type="varchar(50)"/>
             <column name="phone_number" type="varchar(20)"/>

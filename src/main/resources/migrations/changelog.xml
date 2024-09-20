@@ -18,5 +18,8 @@
     <include file="changelog-v6-create_table_payment.xml" relativeToChangelogFile="true"/>
     <include file="changelog-v7-create_table_slot.xml" relativeToChangelogFile="true"/>
     <include file="changelog-v8-create_table_appointment.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v9-create_role.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-v10-create_user_role.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-NGTCHK-3.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
