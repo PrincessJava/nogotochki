@@ -3,6 +3,15 @@ telegram:
   bot-token: 7237232815:AAH0oXQVH196J0ji85ulH4A2KqVDfG3cZLQ
   bot-username: disposer_bot
 
+server:
+  port: 8443
+  ssl:
+      key-store: classpath:keystore.p12
+      key-store-password: password
+      keyStoreType: PKCS12
+      keyAlias: mycert
+  servlet:
+    context-path: /enrollment
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

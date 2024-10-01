@@ -8,26 +8,29 @@ import java.util.*
 
 @Entity
 @Table(name = "user", schema = "public", catalog = "nogotochki")
-class UserEntity : BasicEntity()  {
-
+class UserEntity(
     @Basic
-    @Column(name = "name")
-    var name: String? = null
+    @Column(name = "name", nullable = false)
+    val name: String,
 
     @Basic
     @Column(name = "tg_id")
-    var tgId: String? = null
+    var tgId: String? = null,
 
     @Basic
-    @Column(name = "phone_number")
-    var phoneNumber: String? = null
+    @Column(name = "phone_number", nullable = false)
+    val phoneNumber: String
+) : BasicEntity() {
 
     @Basic
     @Column(name = "org_id")
     var orgId: Int = 0
 
     @Column(name = "password")
-    var password: String? = null
+    private var password: String? = null
+
+    @OneToMany(mappedBy = "user")
+    var appointments: MutableList<AppointmentEntity> = mutableListOf()
 
     @ManyToMany
     @JoinTable(
@@ -39,6 +42,10 @@ class UserEntity : BasicEntity()  {
 
     fun setPassword(password: String, passwordEncoder: PasswordEncoder) {
         this.password = passwordEncoder.encode(password)
+    }
+
+    fun getPassword(): String? {
+        return this.password
     }
 
     override fun equals(other: Any?): Boolean {

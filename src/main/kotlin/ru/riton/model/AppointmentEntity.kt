@@ -1,29 +1,44 @@
 package ru.riton.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotNull
 import ru.riton.ru.riton.model.BasicEntity
 import java.util.*
 
 @Entity
 @Table(name = "appointment", schema = "public", catalog = "nogotochki")
-class AppointmentEntity : BasicEntity()  {
+class AppointmentEntity : BasicEntity() {
 
-    @Basic
-    @Column(name = "slot_id")
-    var slotId: Int = 0
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "slot_id", referencedColumnName = "id")
+    @JsonBackReference
+    var slot: ScheduleEntity? = null
 
-    @Basic
-    @Column(name = "user_id")
-    var userId: Int = 0
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
+    var user: UserEntity? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || javaClass != other.javaClass) return false
-        val that = other as AppointmentEntity
-        return id == that.id && slotId == that.slotId && userId == that.userId
+        if (javaClass != other?.javaClass) return false
+
+        other as AppointmentEntity
+
+        if (slot != other.slot) return false
+        if (user != other.user) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(id, slotId, userId)
+        var result = slot?.hashCode() ?: 0
+        result = 31 * result + (user?.hashCode() ?: 0)
+        return result
     }
+
+
 }

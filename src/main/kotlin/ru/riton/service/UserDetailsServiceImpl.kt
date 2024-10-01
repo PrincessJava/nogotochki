@@ -16,6 +16,6 @@ class UserDetailsServiceImpl(private val userRepository: UserRepository, private
         val user = userRepository.findByPhoneNumber(phone)
             ?: return User(" ", " ", true, true, true, true, emptyList())
 
-        return User(user.phoneNumber, user.password, true, true, true, true, emptyList())
+        return User(user.phoneNumber, user.getPassword(), true, true, true, true, emptyList())
     }
 }

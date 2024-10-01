@@ -25,7 +25,7 @@
             </not>
         </preConditions>
         <addColumn tableName="user">
-            <column name="password" type="text"></column>
+            <column name="password" type="text"/>
         </addColumn>
     </changeSet>
 

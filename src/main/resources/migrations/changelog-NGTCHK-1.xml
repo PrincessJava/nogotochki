@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+
+    <changeSet id="rename_table_slot" author="riton">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="slot"/>
+        </preConditions>
+        <renameTable oldTableName="slot" newTableName="schedule"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="add_columns_to_schedule" author="riton">
+        <preConditions>
+            <not>
+                <columnExists tableName="schedule" columnName="week_day"/>
+                <columnExists tableName="schedule" columnName="location"/>
+                <columnExists tableName="schedule" columnName="description"/>
+                <columnExists tableName="schedule" columnName="capacity"/>
+                <columnExists tableName="schedule" columnName="type"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="schedule">
+            <column name="week_day" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="schedule">
+            <column name="location" type="varchar(256)"/>
+        </addColumn>
+        <addColumn tableName="schedule">
+            <column name="description" type="text"/>
+        </addColumn>
+        <addColumn tableName="schedule">
+            <column name="capacity" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="schedule">
+            <column name="type" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create_trigger_on_appointment" author="riton">
+        <sql splitStatements="false">
+            CREATE
+            OR REPLACE FUNCTION check_capacity()
+RETURNS TRIGGER AS $$
+DECLARE
+            current_capacity INT;
+    current_count
+            INT;
+            BEGIN
+    -- Получаем значение capacity для slot_id, который добавляется
+            SELECT capacity
+            INTO current_capacity
+            FROM schedule
+            WHERE slot_id = NEW.slot_id;
+
+            -- Получаем текущее количество записей на данный slot_id
+            SELECT COUNT(*)
+            INTO current_count
+            FROM appointment
+            WHERE slot_id = NEW.slot_id;
+
+            -- Проверяем, не превышает ли количество записей capacity
+            IF
+            current_count >= current_capacity THEN
+        RAISE EXCEPTION 'Превышена вместимость для данного слота.';
+            END IF;
+
+    -- Если все в порядке, разрешаем вставку записи
+            RETURN NEW;
+            END;
+$$
+            LANGUAGE plpgsql;
+
+            CREATE TRIGGER check_appointment_capacity
+                BEFORE INSERT
+                ON appointment
+                FOR EACH ROW EXECUTE FUNCTION check_capacity();
+        </sql>
+    </changeSet>
+
+    <changeSet id="remove_org_id_from_masters" author="riton">
+        <preConditions>
+            <columnExists tableName="masters" columnName="org_id"/>
+        </preConditions>
+        <dropColumn tableName="masters" columnName="org_id"/>
+    </changeSet>
+
+    <changeSet id="add_user_id_to_masters" author="riton">
+        <preConditions>
+            <not>
+                <columnExists tableName="masters" columnName="user_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="masters">
+            <column name="user_id" type="int">
+            <constraints nullable="false" foreignKeyName="fk_masters_user" references="user(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add_unique_constraint_to_phone" author="riton">
+        <preConditions>
+            <columnExists tableName="user" columnName="phone_number"/>
+        </preConditions>
+        <addUniqueConstraint tableName="user" columnNames="phone_number"/>
+    </changeSet>
+</databaseChangeLog>
