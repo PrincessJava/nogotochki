@@ -5,6 +5,7 @@ import ru.riton.ru.riton.model.BasicEntity
 import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
+import java.time.Instant
 import java.util.*
 
 @Entity
@@ -12,20 +13,20 @@ import java.util.*
 class ScheduleEntity(
     @Basic
     @Column(name = "master_id")
-    val masterId: Int,
+    var masterId: Int = 0,
 
     @Basic
     @Column(name = "start")
-    val start: Timestamp,
+    var start: Timestamp = Timestamp.from(Instant.now()),
 
     @Basic
     @Column(name = "end")
-    val end: Timestamp,
+    var end: Timestamp = Timestamp.from(Instant.now()),
 
     @Basic
     @Enumerated(EnumType.STRING)
     @Column(name = "week_day")
-    val weekDay: WeekDay,
+    var weekDay: WeekDay = WeekDay.MON,
 
     @Basic
     @Column(name = "location")
@@ -37,12 +38,12 @@ class ScheduleEntity(
 
     @Basic
     @Column(name = "capacity")
-    val capacity: Int,
+    var capacity: Int = 0,
 
     @Basic
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    val type: ScheduleType
+    var type: ScheduleType = ScheduleType.REGULAR
 
 ) : BasicEntity() {
     override fun equals(other: Any?): Boolean {

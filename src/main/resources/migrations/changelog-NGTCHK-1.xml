@@ -118,4 +118,11 @@ $$
         </preConditions>
         <addUniqueConstraint tableName="user" columnNames="phone_number"/>
     </changeSet>
+
+    <changeSet id="drop_table_organisation" author="riton">
+        <preConditions>
+            <tableExists tableName="organisation"/>
+        </preConditions>
+        <dropTable tableName="organisation" cascadeConstraints="true"/>
+    </changeSet>
 </databaseChangeLog>

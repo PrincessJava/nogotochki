@@ -1,28 +1,25 @@
-package ru.riton.ru.riton.config
+package ru.riton.ru.riton.config.security
 
 import org.springframework.context.annotation.Bean
-import org.springframework.security.config.Customizer
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.NoOpPasswordEncoder
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import ru.riton.ru.riton.model.enums.Role
 
 
+@Configuration
 @EnableWebSecurity
-class WebSecurityConfig {
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
+@Profile("prod")
+open class ProdSecurityConfig {
 
     @Bean
     @Throws(Exception::class)
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
@@ -30,19 +27,17 @@ class WebSecurityConfig {
                     .requestMatchers("**/admin/**").hasRole(Role.ADMIN.name)
                     .requestMatchers("**/admin/**").hasRole(Role.OWNER.name)
             }
-            .formLogin(Customizer.withDefaults())
+            .formLogin { f -> f.disable() }
             .requiresChannel { requiresChannel ->
                 requiresChannel
                     .anyRequest().requiresSecure()
             }
+            .csrf { csrf -> csrf.disable() } //todo add on prod
         return http.build()
     }
 
     @Throws(java.lang.Exception::class)
-    fun configure(auth: AuthenticationManagerBuilder) {
-        // В продакшене используйте надёжный способ шифрования паролей
-        val passwordEncoder = NoOpPasswordEncoder.getInstance()
-
+    fun configure(auth: AuthenticationManagerBuilder, passwordEncoder: PasswordEncoder) {
         auth.inMemoryAuthentication()
             .passwordEncoder(passwordEncoder)
             .withUser("admin")

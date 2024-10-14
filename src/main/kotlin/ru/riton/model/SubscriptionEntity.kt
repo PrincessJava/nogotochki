@@ -21,18 +21,15 @@ class SubscriptionEntity : BasicEntity()  {
     @Column(name = "operations_count")
     var operationsCount: Int? = null
 
-    @Basic
-    @Column(name = "org_id")
-    var orgId: Int = 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
         val that = other as SubscriptionEntity
-        return id == that.id && orgId == that.orgId && name == that.name && validity == that.validity && operationsCount == that.operationsCount
+        return id == that.id && name == that.name && validity == that.validity && operationsCount == that.operationsCount
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(id, name, validity, operationsCount, orgId)
+        return Objects.hash(id, name, validity, operationsCount)
     }
 }

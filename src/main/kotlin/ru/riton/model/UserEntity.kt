@@ -11,7 +11,7 @@ import java.util.*
 class UserEntity(
     @Basic
     @Column(name = "name", nullable = false)
-    val name: String,
+    var name: String = "",
 
     @Basic
     @Column(name = "tg_id")
@@ -19,12 +19,8 @@ class UserEntity(
 
     @Basic
     @Column(name = "phone_number", nullable = false)
-    val phoneNumber: String
+    var phoneNumber: String = ""
 ) : BasicEntity() {
-
-    @Basic
-    @Column(name = "org_id")
-    var orgId: Int = 0
 
     @Column(name = "password")
     private var password: String? = null
@@ -52,10 +48,10 @@ class UserEntity(
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
         val that = other as UserEntity
-        return id == that.id && orgId == that.orgId && name == that.name && tgId == that.tgId && phoneNumber == that.phoneNumber
+        return id == that.id && name == that.name && tgId == that.tgId && phoneNumber == that.phoneNumber
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(id, name, tgId, phoneNumber, orgId)
+        return Objects.hash(id, name, tgId, phoneNumber)
     }
 }

@@ -11,7 +11,7 @@ import java.util.*
 class MastersEntity(
     @Basic
     @Column(name = "name")
-    val name: String
+    var name: String = ""
 ) : BasicEntity()  {
 
     @NotNull
