@@ -5,4 +5,5 @@ import ru.riton.model.UserEntity
 
 interface UserRepository : JpaRepository<UserEntity, Int> {
     fun findByPhoneNumber(phoneNumber: String): UserEntity?
+    fun existsByPhoneNumber(phoneNumber: String): Boolean
 }

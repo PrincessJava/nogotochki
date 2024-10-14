@@ -65,7 +65,7 @@ DECLARE
             SELECT capacity
             INTO current_capacity
             FROM schedule
-            WHERE slot_id = NEW.slot_id;
+            WHERE id = NEW.slot_id;
 
             -- Получаем текущее количество записей на данный slot_id
             SELECT COUNT(*)

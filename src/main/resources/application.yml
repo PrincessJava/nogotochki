@@ -19,6 +19,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
+        show_sql: true
   #        dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     change-log: classpath:migrations/changelog.xml
@@ -26,3 +27,4 @@ spring:
 logging:
   level:
     root: info
+    org.hibernate.sql: debug

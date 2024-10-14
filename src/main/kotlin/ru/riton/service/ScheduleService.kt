@@ -11,7 +11,7 @@ import ru.riton.ru.riton.repository.ScheduleRepository
 class ScheduleService(private val scheduleRepository: ScheduleRepository) {
 
     fun addSlot(scheduleDto: ScheduleDto): ScheduleEntity {
-        val schedule = ScheduleEntity(scheduleDto.masterId, scheduleDto.start, scheduleDto.end,
+        val schedule = ScheduleEntity(scheduleDto.masterId, scheduleDto.start, scheduleDto.finish,
             scheduleDto.weekDay, scheduleDto.location, scheduleDto.description, scheduleDto.capacity, scheduleDto.type)
 
         return scheduleRepository.save(schedule)

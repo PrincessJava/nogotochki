@@ -20,8 +20,8 @@ class ScheduleEntity(
     var start: Timestamp = Timestamp.from(Instant.now()),
 
     @Basic
-    @Column(name = "end")
-    var end: Timestamp = Timestamp.from(Instant.now()),
+    @Column(name = "finish")
+    var finish: Timestamp = Timestamp.from(Instant.now()),
 
     @Basic
     @Enumerated(EnumType.STRING)
@@ -54,7 +54,7 @@ class ScheduleEntity(
 
         if (masterId != other.masterId) return false
         if (start != other.start) return false
-        if (end != other.end) return false
+        if (finish != other.finish) return false
         if (weekDay != other.weekDay) return false
         if (location != other.location) return false
         if (description != other.description) return false
@@ -67,7 +67,7 @@ class ScheduleEntity(
     override fun hashCode(): Int {
         var result = masterId
         result = 31 * result + start.hashCode()
-        result = 31 * result + end.hashCode()
+        result = 31 * result + finish.hashCode()
         result = 31 * result + weekDay.hashCode()
         result = 31 * result + (location?.hashCode() ?: 0)
         result = 31 * result + (description?.hashCode() ?: 0)

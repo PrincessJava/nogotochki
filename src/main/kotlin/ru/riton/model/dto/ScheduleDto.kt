@@ -7,7 +7,7 @@ import java.sql.Timestamp
 class ScheduleDto(
     val masterId: Int,
     val start: Timestamp,
-    val end: Timestamp,
+    val finish: Timestamp,
     val weekDay: WeekDay,
     var location: String?,
     var description: String?,

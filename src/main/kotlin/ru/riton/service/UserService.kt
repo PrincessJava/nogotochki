@@ -3,6 +3,7 @@ package ru.riton.ru.riton.service
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import ru.riton.exception.NoDataFoundException
+import ru.riton.exception.UserException
 import ru.riton.model.UserEntity
 import ru.riton.ru.riton.model.dto.SetPasswordDto
 import ru.riton.ru.riton.model.dto.UserDto
@@ -13,12 +14,17 @@ class UserService(private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder) {
 
     fun getUser(phone: String): UserEntity {
-        return userRepository.findByPhoneNumber(phone) ?: throw NoDataFoundException(phone)
+        return userRepository.findByPhoneNumber(phone) ?: throw NoDataFoundException(phone, "User not found by phone: $phone")
     }
 
     fun addUser(userDto: UserDto): UserEntity {
-        val user = UserEntity(name = userDto.name, phoneNumber = userDto.phoneNumber, tgId = userDto.tgId)
-        return userRepository.save(user) //todo check that user is new
+        val phoneNumber = userDto.phoneNumber
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw UserException("Пользователь с таким номером телефона $phoneNumber уже зарегистрирован",
+                "User with phone $phoneNumber already exists")
+        }
+        val user = UserEntity(name = userDto.name, phoneNumber = phoneNumber, tgId = userDto.tgId)
+        return userRepository.save(user)
     }
 
     fun setPassword(setPasswordDto: SetPasswordDto) {
@@ -26,5 +32,10 @@ class UserService(private val userRepository: UserRepository,
         userEntity.setPassword(setPasswordDto.password, passwordEncoder)
         userRepository.save(userEntity)
     }
+
+    fun checkUserExists(phone: String): Boolean {
+        return userRepository.existsByPhoneNumber(phone)
+    }
+
 
 }

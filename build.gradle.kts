@@ -38,6 +38,7 @@ dependencies {
     liquibaseRuntime("org.liquibase:liquibase-core")
     liquibaseRuntime("org.liquibase.ext:liquibase-hibernate5:4.27.0")
     liquibaseRuntime("org.springframework.boot:spring-boot:$springBootVersion")
+    implementation("info.picocli:picocli:4.6.3")
 
     //telegram
     implementation("org.telegram:telegrambots:6.9.7.1")
@@ -48,6 +49,21 @@ dependencies {
     implementation("org.jetbrains.kotlin.plugin.allopen:org.jetbrains.kotlin.plugin.allopen.gradle.plugin:2.0.20")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+}
+
+liquibase {
+    activities {
+        register("main") {
+            this.arguments = mapOf(
+                "changeLogFile" to "classpath:migrations/changelog.xml",
+                "url" to "jdbc:postgresql://localhost:5432/nogotochki",
+                "username" to "riton",
+                "password" to "riton",
+                "driver" to "org.postgresql.Driver"
+            )
+        }
+    }
+    runList = "main"
 }
 
 tasks.test {

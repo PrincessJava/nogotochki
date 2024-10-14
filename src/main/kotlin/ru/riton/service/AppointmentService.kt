@@ -2,6 +2,7 @@ package ru.riton.ru.riton.service
 
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
+import ru.riton.exception.NoDataFoundException
 import ru.riton.model.AppointmentEntity
 import ru.riton.model.ScheduleEntity
 import ru.riton.model.UserEntity
@@ -18,9 +19,9 @@ class AppointmentService(private val appointmentRepository: AppointmentRepositor
 
     fun addAppointment(appointmentDto: AddAppointmentDto): AppointmentEntity {
         val slot: ScheduleEntity = scheduleRepository.findById(appointmentDto.slotId)
-            .orElseThrow { EntityNotFoundException("Schedule not found") }
+            .orElseThrow { NoDataFoundException("Расписание этого мастера не найдено","Schedule ${appointmentDto.slotId} not found") }
         val user: UserEntity = userRepository.findById(appointmentDto.userId)
-            .orElseThrow { EntityNotFoundException("User not found") }
+            .orElseThrow { NoDataFoundException("Мастер не найден", "User ${appointmentDto.userId} not found") }
 
         val appointment = AppointmentEntity()
         appointment.slot = slot

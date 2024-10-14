@@ -2,4 +2,4 @@ package ru.riton.exception
 
 import java.lang.RuntimeException
 
-class NoDataFoundException(name: String) : RuntimeException("No data found: $name")
+class NoDataFoundException(name: String, val devMessage: String) : RuntimeException("Запись не найдена: $name")

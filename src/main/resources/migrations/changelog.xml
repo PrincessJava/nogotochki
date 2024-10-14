@@ -22,5 +22,6 @@
     <include file="changelog-v10-create_user_role.xml" relativeToChangelogFile="true"/>
     <include file="changelog-NGTCHK-3.xml" relativeToChangelogFile="true"/>
     <include file="changelog-NGTCHK-1.xml" relativeToChangelogFile="true"/>
+    <include file="changelog-NGTCHK-17.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
