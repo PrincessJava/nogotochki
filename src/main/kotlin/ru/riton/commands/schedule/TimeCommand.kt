@@ -6,34 +6,38 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.bots.AbsSender
+import ru.riton.model.ScheduleEntity
 import ru.riton.ru.riton.createMessageWithInlineButtons
+import ru.riton.ru.riton.formatTime
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
-import java.time.LocalTime
-import kotlin.random.Random
+import ru.riton.ru.riton.parseDate
+import ru.riton.ru.riton.service.ScheduleService
+import ru.riton.ru.riton.slotTime
+import java.time.LocalDateTime
 
 @Component
-class TimeCommand : BotCommand(CommandName.TIME.text, "") {
-    private val days = listOf(
-        "пн" to "mon", "вт" to "tue", "ср" to "wed",
-        "чт" to "thu", "пт" to "fri", "сб" to "sat", "вс" to "sun"
-    )
+class TimeCommand(private val scheduleService: ScheduleService) : BotCommand(CommandName.TIME.text, "") {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
-        val callback = HandlerName.TIME.text
-        absSender.execute(showMenu(chat, callback))
+        absSender.execute(showMenu(chat, arguments[0]))
     }
 
-    private fun showMenu(chat: Chat, callback: String): SendMessage =
-        createMessageWithInlineButtons(chat.id.toString(), "Выберите удобный день", getFreeDaysByTime(callback))
+    private fun showMenu(chat: Chat, time: String): SendMessage {
+        val slots = scheduleService.getFreeRegularSlotsByDay(parseDate(time))
+        val buttons = getSlotsButtons(slots)
+        return createMessageWithInlineButtons(chat.id.toString(), "Выберите удобное время", buttons)
+    }
 
-    private fun getFreeDaysByTime(callback: String): List<List<Pair<String, String>>> {
-        val rand = Random(LocalTime.now().toNanoOfDay())
-        val toIndex = rand.nextInt(7)
-        val fromIndex = rand.nextInt(toIndex)
+    private fun getSlotsButtons(slots: List<ScheduleEntity>): List<List<Pair<String, String>>> {
+        val callback = HandlerName.APPOINTMENT.text
+        val slotButtons = slots.map { slot ->
+            // Формируем пару из callback и текста кнопки
+            val slotStr = slotTime(slot)
+            "$callback|${slot.id}|${slotStr}" to slotStr
+        }
 
-        val availableDays = days.subList(fromIndex, toIndex)
-
-        return listOf(availableDays.map { "$callback|${it.second}|time" to it.first })
+        // Группируем кнопки по одной в каждой строке
+        return slotButtons.map { listOf(it) }
     }
 }

@@ -1,13 +1,11 @@
 package ru.riton.ru.riton.service
 
 import org.springframework.stereotype.Service
-import ru.riton.exception.NoDataFoundException
 import ru.riton.exception.UserException
 import ru.riton.model.MastersEntity
 import ru.riton.model.UserEntity
 import ru.riton.ru.riton.model.dto.UserDto
 import ru.riton.ru.riton.repository.MasterRepository
-import ru.riton.ru.riton.repository.UserRepository
 
 @Service
 class MasterService(
@@ -19,7 +17,7 @@ class MasterService(
         var user: UserEntity? = null
         val phone = userDto.phoneNumber
 
-        if (userService.checkUserExists(phone)) {
+        if (userService.checkUserExistsByPhone(phone)) {
             user = userService.getUser(phone)
             if (masterRepository.existsByUserId(user.id)) {
                 throw UserException(

@@ -5,6 +5,6 @@ import jakarta.persistence.Column
 
 class UserDto(
     val name: String,
-    var tgId: String? = null,
+    var tgId: Long? = null,
     val phoneNumber: String
 )

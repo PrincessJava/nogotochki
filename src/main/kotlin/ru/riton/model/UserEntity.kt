@@ -15,7 +15,7 @@ class UserEntity(
 
     @Basic
     @Column(name = "tg_id")
-    var tgId: String? = null,
+    var tgId: Long? = null,
 
     @Basic
     @Column(name = "phone_number", nullable = false)

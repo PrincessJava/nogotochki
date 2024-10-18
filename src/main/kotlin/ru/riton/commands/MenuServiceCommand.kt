@@ -11,17 +11,21 @@ import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 
 @Component
-class ScheduleCommand : BotCommand(CommandName.SCHEDULE.text, "") {
+class MenuServiceCommand : BotCommand(CommandName.SCHEDULE.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
-        absSender.execute(showMenu(chat, HandlerName.SCHEDULE.text))
+        absSender.execute(showMenu(chat))
     }
 
-    private fun showMenu(chat: Chat, callback: String): SendMessage =
-        createMessageWithInlineButtons(
+    private fun showMenu(chat: Chat): SendMessage  {
+        val serviceCallback = HandlerName.SERVICE.text
+        val masterCallback = HandlerName.MASTER.text
+
+        return createMessageWithInlineButtons(
             chat.id.toString(),
             "Как вам удобнее записаться?",
             listOf(
-                listOf("$callback|time" to "На время", "$callback|master" to "К мастеру")
+                listOf("$serviceCallback|service" to "На услугу", "$masterCallback|master" to "К мастеру")
             )
         )
+    }
 }

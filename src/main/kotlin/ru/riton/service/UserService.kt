@@ -33,9 +33,19 @@ class UserService(private val userRepository: UserRepository,
         userRepository.save(userEntity)
     }
 
-    fun checkUserExists(phone: String): Boolean {
+    fun checkUserExistsByPhone(phone: String): Boolean {
         return userRepository.existsByPhoneNumber(phone)
     }
 
+    fun checkUserExistsByTgId(tgId: Long): Boolean {
+        return userRepository.existsByTgId(tgId)
+    }
 
+    fun getByTgId(tgId: Long): UserEntity {
+        return userRepository.findByTgId(tgId) ?: throw NoDataFoundException(tgId.toString(), "User not found by telegram id: $tgId")
+    }
+
+    fun addTgId(phone: String, tgId: Long) {
+        userRepository.updateByPhoneNumber(tgId = tgId, phone = phone)
+    }
 }

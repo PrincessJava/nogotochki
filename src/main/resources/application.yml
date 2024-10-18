@@ -3,6 +3,9 @@ telegram:
   bot-token: 7237232815:AAH0oXQVH196J0ji85ulH4A2KqVDfG3cZLQ
   bot-username: disposer_bot
 
+app:
+  open-weeks-amount: 3
+
 server:
   servlet:
     context-path: /enrollment

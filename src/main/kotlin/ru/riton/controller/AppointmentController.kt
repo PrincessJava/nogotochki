@@ -14,7 +14,7 @@ class AppointmentController(private val appointmentService: AppointmentService) 
 
     @PostMapping
     fun addSlot(@RequestBody appointmentDto: AddAppointmentDto): ResponseEntity<AppointmentEntity> {
-        return ResponseEntity.ok(appointmentService.addAppointment(appointmentDto))
+        return ResponseEntity.ok(appointmentService.addAppointment(userId = appointmentDto.userId, slotId = appointmentDto.slotId))
     }
 
     @GetMapping("/{userId}")

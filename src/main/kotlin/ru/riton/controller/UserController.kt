@@ -11,7 +11,7 @@ import ru.riton.ru.riton.service.UserService
 @RequestMapping("/user")
 class UserController(private val userService: UserService) {
 
-    @GetMapping("/")
+    @GetMapping
     fun getUser(@RequestParam phone: String): ResponseEntity<UserEntity> {
         return ResponseEntity.ok(userService.getUser(phone))
     }

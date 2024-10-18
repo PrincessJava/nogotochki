@@ -29,7 +29,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(200)"/>
-            <column name="tg_id" type="varchar(50)"/>
+            <column name="tg_id" type="bigint"/>
             <column name="phone_number" type="varchar(20)"/>
             <column name="org_id" type="int">
                 <constraints nullable="false" foreignKeyName="fk_user_organisation" references="organisation(id)"/>

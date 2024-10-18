@@ -2,6 +2,7 @@ package ru.riton.ru.riton.model.enums
 
 enum class CommandName(val text: String) {
     START("start"),
+    REGISTER("register"),
     BUY("buy"),
     SCHEDULE("schedule"),
     INFO("info"),
@@ -9,5 +10,6 @@ enum class CommandName(val text: String) {
 
     TIME("time"),
     MASTER("master"),
-    DAY("day")
+    DAY("day"),
+    SERVICE("service")
 }

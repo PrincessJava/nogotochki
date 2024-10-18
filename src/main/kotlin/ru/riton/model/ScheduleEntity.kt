@@ -1,6 +1,8 @@
 package ru.riton.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotNull
 import ru.riton.ru.riton.model.BasicEntity
 import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
@@ -11,9 +13,11 @@ import java.util.*
 @Entity
 @Table(name = "schedule", schema = "public", catalog = "nogotochki")
 class ScheduleEntity(
-    @Basic
-    @Column(name = "master_id")
-    var masterId: Int = 0,
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "master_id", referencedColumnName = "id")
+    @JsonBackReference
+    var master: MastersEntity? = null,
 
     @Basic
     @Column(name = "start")
@@ -46,13 +50,29 @@ class ScheduleEntity(
     var type: ScheduleType = ScheduleType.REGULAR
 
 ) : BasicEntity() {
+
+
+    //todo refactor
+    companion object {
+        fun copy(oldSchedule: ScheduleEntity, start: Timestamp, finish: Timestamp): ScheduleEntity {
+            val schedule = ScheduleEntity()
+            schedule.master = oldSchedule.master
+            schedule.weekDay = oldSchedule.weekDay
+            schedule.start = start
+            schedule.finish = finish
+            schedule.location = oldSchedule.location
+            schedule.description = oldSchedule.description
+            schedule.capacity = oldSchedule.capacity
+            schedule.type = oldSchedule.type
+            return schedule
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        if (other !is ScheduleEntity) return false
 
-        other as ScheduleEntity
-
-        if (masterId != other.masterId) return false
+        if (master != other.master) return false
         if (start != other.start) return false
         if (finish != other.finish) return false
         if (weekDay != other.weekDay) return false
@@ -65,7 +85,7 @@ class ScheduleEntity(
     }
 
     override fun hashCode(): Int {
-        var result = masterId
+        var result = master?.hashCode() ?: 0
         result = 31 * result + start.hashCode()
         result = 31 * result + finish.hashCode()
         result = 31 * result + weekDay.hashCode()
