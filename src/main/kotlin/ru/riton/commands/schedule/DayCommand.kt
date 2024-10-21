@@ -8,19 +8,19 @@ import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.model.ScheduleEntity
 import ru.riton.ru.riton.*
-import ru.riton.ru.riton.model.ButtonText.nw
-import ru.riton.ru.riton.model.ButtonText.pw
 import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.model.enums.WeekDay
 import ru.riton.ru.riton.service.ScheduleService
+import ru.riton.ru.riton.service.TitleService
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Component
-class DayCommand(private val scheduleService: ScheduleService) : BotCommand(CommandName.DAY.text, "") {
+class DayCommand(private val scheduleService: ScheduleService,
+    private val titleService: TitleService) : BotCommand(CommandName.DAY.text, "") {
     private val daysMap = WeekDay.toMap()
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val timeCallback = HandlerName.TIME.text
@@ -33,21 +33,21 @@ class DayCommand(private val scheduleService: ScheduleService) : BotCommand(Comm
         val weekOffsetCallback = HandlerName.WEEK_NAVIGATION.text
         val freeDays = getSlots(weekOffset, service)
         if (freeDays.isEmpty()) {
-            return createMessage(chat.id.toString(), "Нет свободных слотов")
+            return createMessage(chat.id.toString(), titleService.noFreeSlots)
         }
         val buttons = getDaysButtons(timeCallback, freeDays) + listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "previous",
                     ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
-                ) to pw,
+                ) to titleService.prevWeek,
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "next",
                     ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
-                ) to nw
+                ) to titleService.nextWeek
             )
         )
-        return createMessageWithInlineButtons(chat.id.toString(), "Выберите удобный день", buttons)
+        return createMessageWithInlineButtons(chat.id.toString(), titleService.chooseDay, buttons)
     }
 
     private fun getSlots(weekOffset: Int, service: String): List<ScheduleEntity> {

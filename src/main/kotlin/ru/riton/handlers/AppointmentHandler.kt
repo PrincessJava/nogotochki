@@ -10,6 +10,7 @@ import ru.riton.ru.riton.editLastMessage
 import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.service.AppointmentService
 import ru.riton.ru.riton.service.ScheduleService
+import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
 import ru.riton.ru.riton.slotDate
 import ru.riton.ru.riton.slotTime
@@ -18,7 +19,9 @@ import ru.riton.ru.riton.slotTime
 class AppointmentHandler(
     private val appointmentService: AppointmentService,
     private val scheduleService: ScheduleService,
-    private val userService: UserService) : CallbackHandler {
+    private val userService: UserService,
+    private val titleService: TitleService
+) : CallbackHandler {
     override val name = HandlerName.APPOINTMENT
 
     override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: Map<ArgumentCode, String>) {
@@ -29,9 +32,14 @@ class AppointmentHandler(
         appointmentService.checkUserAppointments(userId = user.id, slotId = schedule.id, start = schedule.start, finish = schedule.finish)
         appointmentService.addAppointment(userId = user.id, slotId = schedule.id)
 
-        absSender.execute(createMessage((callbackQuery.message as Message).chat.id.toString(), "Вы успешно записаны к ${schedule.master!!.name} " +
-                slotDate(schedule) +
-                " на ${slotTime(schedule)}}"))
+        absSender.execute(
+            createMessage(
+                (callbackQuery.message as Message).chat.id.toString(), String.format(
+                    titleService.assignSuccess, schedule.master!!.name,
+                    slotDate(schedule), slotTime(schedule), schedule.description!!.value
+                )
+            )
+        )
 //        editLastMessage(absSender, callbackQuery)
     }
 }

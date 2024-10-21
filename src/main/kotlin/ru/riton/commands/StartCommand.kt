@@ -11,10 +11,14 @@ import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.pairsToString
+import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
 
 @Component
-class StartCommand(private val userService: UserService) : BotCommand(CommandName.START.text, "") {
+class StartCommand(
+    private val userService: UserService,
+    private val titleService: TitleService
+) : BotCommand(CommandName.START.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val callback = HandlerName.MAIN_MENU.text
         absSender.execute(showMenu(chat, user, callback))
@@ -32,23 +36,27 @@ class StartCommand(private val userService: UserService) : BotCommand(CommandNam
         callback: String
     ) = createMessageWithInlineButtons(
         chat.id.toString(),
-        "Привет, ${user.firstName}!",
+        String.format(titleService.greeting, user.firstName),
         listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
-                    ArgumentCode.COMMAND_NAME.text to CommandName.BUY.text,
-                    ArgumentCode.BUTTON_TEXT.text to "Купить абонемент/занятие"
-                ) to "Купить абонемент/занятие",
-                pairsToString(ArgumentCode.HANDLER_NAME.text to callback, ArgumentCode.COMMAND_NAME.text to CommandName.SERVICE.text, ArgumentCode.BUTTON_TEXT.text to "Записаться") to "Записаться"
-            ),
-            listOf(
-                pairsToString(ArgumentCode.HANDLER_NAME.text to callback, ArgumentCode.COMMAND_NAME.text to CommandName.INFO.text, ArgumentCode.BUTTON_TEXT.text to "Информация") to "Информация",
+                    ArgumentCode.COMMAND_NAME.text to CommandName.BUY.text
+                ) to titleService.buy,
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
-                    ArgumentCode.COMMAND_NAME.text to CommandName.ADMIN.text,
-                    ArgumentCode.BUTTON_TEXT.text to "Связь с администратором"
-                ) to "Связь с администратором"
+                    ArgumentCode.COMMAND_NAME.text to CommandName.SERVICE.text
+                ) to titleService.assign
+            ),
+            listOf(
+                pairsToString(
+                    ArgumentCode.HANDLER_NAME.text to callback,
+                    ArgumentCode.COMMAND_NAME.text to CommandName.INFO.text
+                ) to titleService.info,
+                pairsToString(
+                    ArgumentCode.HANDLER_NAME.text to callback,
+                    ArgumentCode.COMMAND_NAME.text to CommandName.ADMIN.text
+                ) to titleService.admin
             ),
         )
     )
@@ -59,14 +67,13 @@ class StartCommand(private val userService: UserService) : BotCommand(CommandNam
         callback: String
     ) = createMessageWithInlineButtons(
         chat.id.toString(),
-        "Привет, ${user.firstName}!",
+        String.format(titleService.greeting, user.firstName),
         listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
-                    ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text,
-                    ArgumentCode.BUTTON_TEXT.text to "Зарегистрироваться"
-                ) to "Зарегистрироваться"
+                    ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text
+                ) to titleService.register
             )
         )
     )

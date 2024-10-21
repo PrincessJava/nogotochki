@@ -5,6 +5,8 @@ telegram:
 
 app:
   open-weeks-amount: 3
+  company:
+    name: driving_school
 
 server:
   servlet:

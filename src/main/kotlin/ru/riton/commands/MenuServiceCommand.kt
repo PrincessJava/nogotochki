@@ -11,10 +11,12 @@ import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.pairsToString
+import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
 
 @Component
-class MenuServiceCommand(private val userService: UserService) : BotCommand(CommandName.SCHEDULE.text, "") {
+class MenuServiceCommand(private val userService: UserService,
+    private val titleService: TitleService) : BotCommand(CommandName.SCHEDULE.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         absSender.execute(showMenu(chat, user))
     }
@@ -23,14 +25,13 @@ class MenuServiceCommand(private val userService: UserService) : BotCommand(Comm
         if (!userService.userExistsByTgId(user.id)) {
             return createMessageWithInlineButtons(
                 chat.id.toString(),
-                "Вы не зарегистрированы. Пожалуйста, нажмите \"Зарегистрироваться\"",
+                titleService.notRegistered,
                 listOf(
                     listOf(
                         pairsToString(
                             ArgumentCode.HANDLER_NAME.text to HandlerName.REGISTER.text,
-                            ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text,
-                            ArgumentCode.BUTTON_TEXT.text to "Зарегистрироваться"
-                        ) to "Зарегистрироваться"
+                            ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text
+                        ) to titleService.register
                     )
                 )
             )
@@ -43,17 +44,17 @@ class MenuServiceCommand(private val userService: UserService) : BotCommand(Comm
 
         return createMessageWithInlineButtons(
             chat.id.toString(),
-            "Как вам удобнее записаться?",
+            titleService.chooseAssign,
             listOf(
                 listOf(
                     pairsToString(
                         ArgumentCode.HANDLER_NAME.text to serviceCallback,
-                        ArgumentCode.COMMAND_NAME.text to serviceCommand, ArgumentCode.BUTTON_TEXT.text to "На услугу"
-                    ) to "На услугу",
+                        ArgumentCode.COMMAND_NAME.text to serviceCommand
+                    ) to titleService.onClass,
                     pairsToString(
                         ArgumentCode.HANDLER_NAME.text to masterCallback,
-                        ArgumentCode.COMMAND_NAME.text to masterCommand, ArgumentCode.BUTTON_TEXT.text to "К мастеру"
-                    ) to "К мастеру"
+                        ArgumentCode.COMMAND_NAME.text to masterCommand
+                    ) to titleService.toMaster
                 )
             )
         )

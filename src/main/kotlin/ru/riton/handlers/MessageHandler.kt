@@ -8,13 +8,15 @@ import ru.riton.ru.riton.phoneMatchesPattern
 import ru.riton.ru.riton.model.UserSession
 import ru.riton.ru.riton.model.dto.UserDto
 import ru.riton.ru.riton.model.enums.UserState
+import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
 import ru.riton.ru.riton.service.UserSessionService
 
 @Component
 class MessageHandler(
     private val userSessionService: UserSessionService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val titleService: TitleService
 ) {
     fun processTextMessage(update: Update, absSender: AbsSender) {
         val message = update.message
@@ -29,13 +31,13 @@ class MessageHandler(
                 session.state = UserState.ASKING_PHONE
                 userSessionService.updateSession(userId, session)
 
-                absSender.execute(SendMessage(chatId, "Введите ваш номер телефона в формате 8XXXXXXXXXX:"))
+                absSender.execute(SendMessage(chatId, titleService.enterPhone))
             }
 
             UserState.ASKING_PHONE -> {
                 val phoneNumber = message.text
                 if (!phoneMatchesPattern(phoneNumber)) {
-                    absSender.execute(SendMessage(chatId, "Пожалуйста, введите номер телефона в формате 8XXXXXXXXXX:"))
+                    absSender.execute(SendMessage(chatId, titleService.enterWrongPhone))
                 } else {
                     session.phoneNumber = phoneNumber
                     session.state = UserState.COMPLETE
@@ -44,12 +46,12 @@ class MessageHandler(
                     saveOrUpdateUser(session, userId)
                     userSessionService.clearSession(userId)
 
-                    absSender.execute(SendMessage(chatId, "Спасибо, вы зарегистрированы!"))
+                    absSender.execute(SendMessage(chatId, titleService.registered))
                 }
             }
 
             UserState.COMPLETE -> {
-                absSender.execute(SendMessage(chatId, "Вы уже зарегистрированы."))
+                absSender.execute(SendMessage(chatId, titleService.alreadyRegistered))
             }
         }
     }

@@ -13,21 +13,23 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.model.enums.UserState
+import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
 import ru.riton.ru.riton.service.UserSessionService
 
 
 @Component
-class RegisterCommand(private val userSessionService: UserSessionService) : BotCommand(CommandName.REGISTER.text, "") {
+class RegisterCommand(private val userSessionService: UserSessionService,
+    private val titleService: TitleService) : BotCommand(CommandName.REGISTER.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
 
         val userId = user.id
         val session = userSessionService.getSession(userId)
 
         if (session.state == UserState.COMPLETE) {
-            absSender.execute(SendMessage(chat.id.toString(), "Вы уже зарегистрированы."))
+            absSender.execute(SendMessage(chat.id.toString(), titleService.alreadyRegistered))
         } else {
-            absSender.execute(SendMessage(chat.id.toString(), "Введите ваше имя:"))
+            absSender.execute(SendMessage(chat.id.toString(), titleService.writeName))
             session.state = UserState.ASKING_NAME
             userSessionService.updateSession(userId, session)
         }

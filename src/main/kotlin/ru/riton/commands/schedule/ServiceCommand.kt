@@ -13,9 +13,12 @@ import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.pairsToString
 import ru.riton.ru.riton.service.DescriptionService
+import ru.riton.ru.riton.service.TitleService
 
 @Component
-class ServiceCommand(private val descriptionService: DescriptionService) : BotCommand(CommandName.SERVICE.text, "") {
+class ServiceCommand(private val descriptionService: DescriptionService,
+                     private val titleService: TitleService
+) : BotCommand(CommandName.SERVICE.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         val callback = HandlerName.DAY.text
 
@@ -24,7 +27,7 @@ class ServiceCommand(private val descriptionService: DescriptionService) : BotCo
 
     private fun showMenu(chat: Chat, callback: String): SendMessage {
         val buttons = getDescriptions(callback)
-        return createMessageWithInlineButtonsRows(chat.id.toString(), "Выберите услугу", buttons)
+        return createMessageWithInlineButtonsRows(chat.id.toString(), titleService.chooseClass, buttons)
     }
 
     private fun getDescriptions(callback: String): List<List<Pair<String, String>>> {

@@ -9,11 +9,12 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.createMessageWithInlineButtons
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
+import ru.riton.ru.riton.service.TitleService
 import java.time.LocalTime
 import kotlin.random.Random
 
 @Component
-class MasterCommand : BotCommand(CommandName.MASTER.text, "") {
+class MasterCommand(private val titleService: TitleService) : BotCommand(CommandName.MASTER.text, "") {
     private val days = listOf(
         "пн" to "mon", "вт" to "tue", "ср" to "wed",
         "чт" to "thu", "пт" to "fri", "сб" to "sat", "вс" to "sun"
