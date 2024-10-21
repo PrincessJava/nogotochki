@@ -17,6 +17,6 @@ class TimeHandler(private val applicationContext: ApplicationContext) : Callback
     override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: Map<ArgumentCode, String>) {
 //        editLastMessage(absSender, callbackQuery)
         val command = applicationContext.getBean(NogotochkiBot::class.java).getCommand(arguments[ArgumentCode.COMMAND_NAME]!!)
-        command.execute(absSender, callbackQuery.from, (callbackQuery.message as Message).chat, arrayOf(arguments[ArgumentCode.TIME]))
+        command.execute(absSender, callbackQuery.from, (callbackQuery.message as Message).chat, arrayOf(arguments[ArgumentCode.DATE], arguments[ArgumentCode.MASTER_ID]))
     }
 }

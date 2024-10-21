@@ -16,9 +16,11 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Service
-open class ScheduleService(private val scheduleRepository: ScheduleRepository,
-                           private val masterRepository: MasterRepository,
-                           @Value("\${app.open-weeks-amount}") val openWeeksAmount: Long) {
+open class ScheduleService(
+    private val scheduleRepository: ScheduleRepository,
+    private val masterRepository: MasterRepository,
+    @Value("\${app.open-weeks-amount}") val openWeeksAmount: Long
+) {
     @Transactional
     @Scheduled(cron = "0 0 0 * * MON") // Запуск каждый понедельник в 00:00
     open fun extendRegularSchedules() {
@@ -84,33 +86,36 @@ open class ScheduleService(private val scheduleRepository: ScheduleRepository,
         )
     }
 
-    open fun getFreeRegularSlotsByRange(nextStartUsr: LocalDateTime, nextEndUsr: LocalDateTime, descriptionId: String): List<ScheduleEntity> {
+    open fun getFreeRegularSlotsByRange(nextStartUsr: LocalDateTime, nextEndUsr: LocalDateTime, descriptionId: String?, masterId: String?): List<ScheduleEntity> {
         val nextStart = if (nextStartUsr.isAfter(LocalDateTime.now())) nextStartUsr else LocalDateTime.now()
         val nextEnd = if (nextEndUsr.isBefore(LocalDateTime.now().plusWeeks(openWeeksAmount)))
             nextEndUsr else LocalDateTime.now().plusWeeks(openWeeksAmount).with(LocalTime.MAX)
 
-        return scheduleRepository.getFreeByRangeAndDescription(
+        return scheduleRepository.getFreeByRangeMasterAndDescription(
             ScheduleType.REGULAR,
             Timestamp.valueOf(nextStart),
             Timestamp.valueOf(nextEnd),
-            descriptionId.toInt()
+            descriptionId?.toIntOrNull(),
+            masterId?.toIntOrNull()
         )
     }
 
-    open fun getFreeRegularSlotsByDay(time: LocalDateTime): List<ScheduleEntity> {
+    open fun getFreeRegularSlotsByDayAndMaster(time: LocalDateTime, master: String): List<ScheduleEntity> {
         val start = time.with(LocalTime.MIN)
         val end = time.with(LocalTime.MAX)
+        val masterId = master.toInt()
 
-        return scheduleRepository.getFreeByRange(
+        return scheduleRepository.getFreeByRangeMasterAndDescription(
             ScheduleType.REGULAR,
             Timestamp.valueOf(start),
-            Timestamp.valueOf(end)
+            Timestamp.valueOf(end), null, masterId
         )
     }
 
     open fun getById(id: Int?): ScheduleEntity {
         id ?: throw UserException("Слот не найден", "Slot is is null")
-        return scheduleRepository.findById(id).orElseThrow{UserException("Слот не найден. Возможно он был удален", "No slot found by id = $id")}
+        return scheduleRepository.findById(id).orElseThrow { UserException("Слот не найден. Возможно он был удален", "No slot found by id = $id") }
     }
+
 
 }

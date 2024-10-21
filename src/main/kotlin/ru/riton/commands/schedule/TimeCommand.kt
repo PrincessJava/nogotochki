@@ -13,18 +13,17 @@ import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.service.ScheduleService
 import ru.riton.ru.riton.service.TitleService
-import java.time.LocalDateTime
 
 @Component
 class TimeCommand(private val scheduleService: ScheduleService,
     private val titleService: TitleService) : BotCommand(CommandName.TIME.text, "") {
 
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
-        absSender.execute(showMenu(chat, arguments[0]))
+        absSender.execute(showMenu(chat, arguments[0], arguments[1]))
     }
 
-    private fun showMenu(chat: Chat, time: String): SendMessage {
-        val slots = scheduleService.getFreeRegularSlotsByDay(parseDate(time))
+    private fun showMenu(chat: Chat, date: String, masterId: String): SendMessage {
+        val slots = scheduleService.getFreeRegularSlotsByDayAndMaster(parseDate(date), masterId)
         val buttons = getSlotsButtons(slots)
         return createMessageWithInlineButtons(chat.id.toString(), titleService.getChooseTime(), buttons)
     }

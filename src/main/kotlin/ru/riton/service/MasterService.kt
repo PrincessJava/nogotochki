@@ -39,4 +39,8 @@ class MasterService(
         masterRepository.deleteById(id)
     }
 
+    fun getAll(): List<MastersEntity> {
+        return masterRepository.findAll()
+    }
+
 }

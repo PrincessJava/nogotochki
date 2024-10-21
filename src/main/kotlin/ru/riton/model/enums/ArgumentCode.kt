@@ -9,7 +9,9 @@ enum class ArgumentCode(val text: String) {
     WEEK_OFFSET("wo"),
     ACTION("a"),
     BUTTON_TEXT("bt"),
-    DESCRIPTION_ID("di");
+    DESCRIPTION_ID("di"),
+    MASTER_ID("mi"),
+    DATE("d");
 
     companion object {
         // Метод для поиска элемента Enum по значению

@@ -16,6 +16,7 @@ class TitleService(
     @Value("\${button.next_week:След. неделя}") private val nextWeek: String,
     @Value("\${text.choose_day:Выберите удобный день}") private val chooseDay: String,
     @Value("\${text.choose_class:Выберите занятие}") private val chooseClass: String,
+    @Value("\${text.choose_master:Выберите мастера}") private val chooseMaster: String,
     @Value("\${text.choose_time:Выберите удобное время}") private val chooseTime: String,
     @Value("\${text.not_registered:Вы не зарегистрированы. Пожалуйста, нажмите \"Зарегистрироваться\"}") private val notRegistered: String,
     @Value("\${button.register:Зарегистрироваться}") private val register: String,
@@ -55,6 +56,10 @@ class TitleService(
     }
     fun getChooseClass(): String {
         return String(chooseClass.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+
+    fun getChooseMaster(): String {
+        return String(chooseMaster.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
     fun getChooseTime(): String {
         return String(chooseTime.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))

@@ -8,7 +8,7 @@ import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
 
-interface ScheduleRepository : JpaRepository<ScheduleEntity, Int> {
+interface ScheduleRepository : JpaRepository<ScheduleEntity, Int>, ScheduleRepositoryCustom {
 
     @Query(
         "select s from ScheduleEntity s " +
@@ -55,10 +55,11 @@ interface ScheduleRepository : JpaRepository<ScheduleEntity, Int> {
         "select s from ScheduleEntity s " +
                 "where s.start between :start and :finish " +
                 "and s.type = :type " +
-                "and s.capacity > (select COALESCE(COUNT(distinct a.user), 0) from AppointmentEntity a " +
+                "and s.capacity > (select COALESCE(COUNT(distinct a.user.id), 0) from AppointmentEntity a " +
                 "                  where a.slot.id = s.id) " +
-                "and s.description.id = :descriptionId"
+                "and s.description.id = :descriptionId " +
+                "and s.master.id = :masterId"
     )
-    fun getFreeByRangeAndDescription(@Param("type") type: ScheduleType, @Param("start") start: Timestamp, @Param("finish") finish: Timestamp, @Param("descriptionId") descriptionId: Int): List<ScheduleEntity>
+    fun getFreeByRangeAndDescription(@Param("type") type: ScheduleType, @Param("start") start: Timestamp, @Param("finish") finish: Timestamp, @Param("descriptionId") descriptionId: Int, @Param("masterId") masterId: Int): List<ScheduleEntity>
 
 }

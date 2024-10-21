@@ -31,6 +31,6 @@ class WeekNavigationHandler(private val dayCommand: DayCommand) : CallbackHandle
             else -> currentWeekOffset
         }
 
-        dayCommand.execute(absSender, user, chat, arrayOf(newWeekOffset.toString()))
+        dayCommand.execute(absSender, user, chat, arrayOf(arguments[ArgumentCode.DESCRIPTION_ID]!!, arguments[ArgumentCode.MASTER_ID]!!, newWeekOffset.toString()))
     }
 }

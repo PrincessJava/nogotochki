@@ -6,17 +6,16 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.NogotochkiBot
-import ru.riton.ru.riton.model.enums.HandlerName
-import ru.riton.ru.riton.editLastMessage
 import ru.riton.ru.riton.model.enums.ArgumentCode
+import ru.riton.ru.riton.model.enums.HandlerName
 
 @Component
-class DayHandler(private val applicationContext: ApplicationContext) : CallbackHandler {
-    override val name = HandlerName.DAY
+class MasterHandler(private val applicationContext: ApplicationContext) : CallbackHandler {
+    override val name = HandlerName.MASTER
 
     override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: Map<ArgumentCode, String>) {
 //        editLastMessage(absSender, callbackQuery)
         val command = applicationContext.getBean(NogotochkiBot::class.java).getCommand(arguments[ArgumentCode.COMMAND_NAME]!!)
-        command.execute(absSender, callbackQuery.from, (callbackQuery.message as Message).chat, arrayOf(arguments[ArgumentCode.DESCRIPTION_ID], arguments[ArgumentCode.MASTER_ID]))
+        command.execute(absSender, callbackQuery.from, (callbackQuery.message as Message).chat, arrayOf())
     }
 }
