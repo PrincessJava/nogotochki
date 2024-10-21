@@ -11,15 +11,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.model.enums.CommandName
+import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.model.enums.UserState
 import ru.riton.ru.riton.service.UserService
 import ru.riton.ru.riton.service.UserSessionService
 
 
 @Component
-class RegisterCommand(private val userSessionService: UserSessionService,
-                      private val userService: UserService) : BotCommand(CommandName.REGISTER.text, "") {
+class RegisterCommand(private val userSessionService: UserSessionService) : BotCommand(CommandName.REGISTER.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
+
         val userId = user.id
         val session = userSessionService.getSession(userId)
 

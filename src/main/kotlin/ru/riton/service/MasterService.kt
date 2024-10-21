@@ -17,7 +17,7 @@ class MasterService(
         var user: UserEntity? = null
         val phone = userDto.phoneNumber
 
-        if (userService.checkUserExistsByPhone(phone)) {
+        if (userService.existsByPhoneNumber(phone)) {
             user = userService.getUser(phone)
             if (masterRepository.existsByUserId(user.id)) {
                 throw UserException(

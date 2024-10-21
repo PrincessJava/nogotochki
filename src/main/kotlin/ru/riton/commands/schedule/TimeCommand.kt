@@ -7,13 +7,11 @@ import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.model.ScheduleEntity
-import ru.riton.ru.riton.createMessageWithInlineButtons
-import ru.riton.ru.riton.formatTime
+import ru.riton.ru.riton.*
+import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
-import ru.riton.ru.riton.parseDate
 import ru.riton.ru.riton.service.ScheduleService
-import ru.riton.ru.riton.slotTime
 import java.time.LocalDateTime
 
 @Component
@@ -34,7 +32,9 @@ class TimeCommand(private val scheduleService: ScheduleService) : BotCommand(Com
         val slotButtons = slots.map { slot ->
             // Формируем пару из callback и текста кнопки
             val slotStr = slotTime(slot)
-            "$callback|${slot.id}|${slotStr}" to slotStr
+            pairsToString(
+                ArgumentCode.HANDLER_NAME.text to callback, ArgumentCode.SCHEDULE_ID.text to slot.id.toString()
+            ) to slotStr
         }
 
         // Группируем кнопки по одной в каждой строке

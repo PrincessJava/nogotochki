@@ -50,7 +50,7 @@ open class ScheduleService(private val scheduleRepository: ScheduleRepository,
         val master = masterRepository.findById(scheduleDto.masterId)
         val schedule = ScheduleEntity(
             master.get(), scheduleDto.start, scheduleDto.finish, //todo check not null
-            scheduleDto.weekDay, scheduleDto.location, scheduleDto.description, scheduleDto.capacity, scheduleDto.type
+//            scheduleDto.weekDay, scheduleDto.location, scheduleDto.description, scheduleDto.capacity, scheduleDto.type
         )
         val newSchedule = scheduleRepository.save(schedule)
 
@@ -84,7 +84,7 @@ open class ScheduleService(private val scheduleRepository: ScheduleRepository,
         )
     }
 
-    open fun getFreeRegularSlotsByRange(nextStartUsr: LocalDateTime, nextEndUsr: LocalDateTime, service: String): List<ScheduleEntity> {
+    open fun getFreeRegularSlotsByRange(nextStartUsr: LocalDateTime, nextEndUsr: LocalDateTime, descriptionId: String): List<ScheduleEntity> {
         val nextStart = if (nextStartUsr.isAfter(LocalDateTime.now())) nextStartUsr else LocalDateTime.now()
         val nextEnd = if (nextEndUsr.isBefore(LocalDateTime.now().plusWeeks(openWeeksAmount)))
             nextEndUsr else LocalDateTime.now().plusWeeks(openWeeksAmount).with(LocalTime.MAX)
@@ -93,7 +93,7 @@ open class ScheduleService(private val scheduleRepository: ScheduleRepository,
             ScheduleType.REGULAR,
             Timestamp.valueOf(nextStart),
             Timestamp.valueOf(nextEnd),
-            service
+            descriptionId.toInt()
         )
     }
 
@@ -113,7 +113,4 @@ open class ScheduleService(private val scheduleRepository: ScheduleRepository,
         return scheduleRepository.findById(id).orElseThrow{UserException("Слот не найден. Возможно он был удален", "No slot found by id = $id")}
     }
 
-    open fun getAllServices(): List<String> {
-        return scheduleRepository.getDescriptions()
-    }
 }

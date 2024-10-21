@@ -9,6 +9,37 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-
+    <changeSet id="add_description_dictionary" author="riton">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="description"/>
+            </not>
+        </preConditions>
+        <createTable tableName="description">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="value" type="text"/>
+        </createTable>
+        <rollback/>
+    </changeSet>
+    <changeSet id="add_column_description_id" author="riton">
+        <preConditions>
+            <not>
+                <columnExists tableName="schedule" columnName="description_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="schedule">
+            <column name="description_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_schedule_description" references="description(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="drop_column_description" author="riton">
+        <preConditions>
+            <columnExists tableName="schedule" columnName="description_id"/>
+        </preConditions>
+        <dropColumn tableName="schedule" columnName="description"/>
+    </changeSet>
 
 </databaseChangeLog>

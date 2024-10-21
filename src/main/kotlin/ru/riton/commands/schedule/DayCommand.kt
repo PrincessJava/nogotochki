@@ -7,13 +7,14 @@ import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.model.ScheduleEntity
-import ru.riton.ru.riton.createMessage
-import ru.riton.ru.riton.createMessageWithInlineButtons
+import ru.riton.ru.riton.*
+import ru.riton.ru.riton.model.ButtonText.nw
+import ru.riton.ru.riton.model.ButtonText.pw
+import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.CommandName
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.model.enums.WeekDay
 import ru.riton.ru.riton.service.ScheduleService
-import ru.riton.ru.riton.slotDate
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -36,8 +37,14 @@ class DayCommand(private val scheduleService: ScheduleService) : BotCommand(Comm
         }
         val buttons = getDaysButtons(timeCallback, freeDays) + listOf(
             listOf(
-                "$weekOffsetCallback|previous|$weekOffset|$service" to "Пред. неделя",
-                "$weekOffsetCallback|next|$weekOffset|$service" to "След. неделя"
+                pairsToString(
+                    ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "previous",
+                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
+                ) to pw,
+                pairsToString(
+                    ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "next",
+                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
+                ) to nw
             )
         )
         return createMessageWithInlineButtons(chat.id.toString(), "Выберите удобный день", buttons)
@@ -59,8 +66,12 @@ class DayCommand(private val scheduleService: ScheduleService) : BotCommand(Comm
         val availableDays = schedules.mapNotNull { schedule ->
             val dayRus = daysMap[schedule.weekDay]
             val date = slotDate(schedule)
-            dayRus?.let { "$callback|time|${schedule.start}" to it + date }
-
+            dayRus?.let {
+                pairsToString(
+                    ArgumentCode.HANDLER_NAME.text to callback, ArgumentCode.COMMAND_NAME.text to CommandName.TIME.text,
+                    ArgumentCode.TIME.text to schedule.start.toString()
+                ) to it + date
+            }
         }.distinctBy { it.first }
 
         return listOf(availableDays)

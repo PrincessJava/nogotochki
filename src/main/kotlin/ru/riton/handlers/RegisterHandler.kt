@@ -6,13 +6,12 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.NogotochkiBot
-import ru.riton.ru.riton.model.enums.HandlerName
-import ru.riton.ru.riton.editLastMessage
 import ru.riton.ru.riton.model.enums.ArgumentCode
+import ru.riton.ru.riton.model.enums.HandlerName
 
 @Component
-class ServiceHandler(private val applicationContext: ApplicationContext) : CallbackHandler {
-    override val name = HandlerName.SERVICE
+class RegisterHandler(private val applicationContext: ApplicationContext) : CallbackHandler {
+    override val name = HandlerName.REGISTER
 
     override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: Map<ArgumentCode, String>) {
 //        editLastMessage(absSender, callbackQuery)

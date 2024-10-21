@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
 import ru.riton.ru.riton.model.BasicEntity
+import ru.riton.ru.riton.model.DescriptionEntity
 import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
@@ -36,9 +37,11 @@ class ScheduleEntity(
     @Column(name = "location")
     var location: String? = null,
 
-    @Basic
-    @Column(name = "description")
-    var description: String? = null,
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "description_id", referencedColumnName = "id")
+    @JsonBackReference
+    var description: DescriptionEntity? = null,
 
     @Basic
     @Column(name = "capacity")

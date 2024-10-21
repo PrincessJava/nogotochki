@@ -1,5 +1,6 @@
 package ru.riton.ru.riton.service
 
+import jakarta.transaction.Transactional
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import ru.riton.exception.NoDataFoundException
@@ -10,7 +11,7 @@ import ru.riton.ru.riton.model.dto.UserDto
 import ru.riton.ru.riton.repository.UserRepository
 
 @Service
-class UserService(private val userRepository: UserRepository,
+open class UserService(private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder) {
 
     fun getUser(phone: String): UserEntity {
@@ -33,19 +34,20 @@ class UserService(private val userRepository: UserRepository,
         userRepository.save(userEntity)
     }
 
-    fun checkUserExistsByPhone(phone: String): Boolean {
+    open fun existsByPhoneNumber(phone: String): Boolean {
         return userRepository.existsByPhoneNumber(phone)
     }
 
-    fun checkUserExistsByTgId(tgId: Long): Boolean {
+    open fun userExistsByTgId(tgId: Long): Boolean {
         return userRepository.existsByTgId(tgId)
     }
 
-    fun getByTgId(tgId: Long): UserEntity {
+    open fun getByTgId(tgId: Long): UserEntity {
         return userRepository.findByTgId(tgId) ?: throw NoDataFoundException(tgId.toString(), "User not found by telegram id: $tgId")
     }
 
-    fun addTgId(phone: String, tgId: Long) {
+    @Transactional
+    open fun addTgId(phone: String, tgId: Long) {
         userRepository.updateByPhoneNumber(tgId = tgId, phone = phone)
     }
 }

@@ -1,14 +1,14 @@
 package ru.riton.ru.riton
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
+import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.model.ScheduleEntity
+import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
 import java.time.DayOfWeek
@@ -46,6 +46,23 @@ fun getInlineKeyboard(allButtons: List<List<Pair<String, String>>>): InlineKeybo
                     text = buttonText
                     callbackData = data
                 }
+            }
+        }
+    }
+
+fun createMessageWithInlineButtonsRows(chatId: String, text: String, inlineButtons: List<List<Pair<String, String>>>) =
+    createMessage(chatId, text)
+        .apply {
+            replyMarkup = getInlineKeyboardRows(inlineButtons)
+        }
+fun getInlineKeyboardRows(allButtons: List<List<Pair<String, String>>>): InlineKeyboardMarkup =
+    InlineKeyboardMarkup().apply {
+        keyboard = allButtons.flatMap { rowButtons ->
+            rowButtons.map { (data, buttonText) ->
+                listOf(InlineKeyboardButton().apply {
+                    text = buttonText
+                    callbackData = data
+                })
             }
         }
     }
@@ -135,9 +152,9 @@ fun slotDate(slot: ScheduleEntity): String {
 fun editLastMessage(absSender: AbsSender, callbackQuery: CallbackQuery) {
     val messageId = callbackQuery.message.messageId
     val chatId = callbackQuery.message.chatId.toString()
-    val buttonText = callbackQuery.data.split("|").last().trim() // This contains the callback data (button identifier)
+    val buttonText = parseStringToMap(callbackQuery.data)[ArgumentCode.BUTTON_TEXT]  // This contains the callback data (button identifier)
 
-    val newMessageText = "${callbackQuery.message}\n\nВы выбрали: $buttonText"
+    val newMessageText = "${(callbackQuery.message as Message).text}\n\nВы выбрали: $buttonText"
 
     val editMessageText = EditMessageText()
     editMessageText.chatId = chatId
@@ -148,4 +165,25 @@ fun editLastMessage(absSender: AbsSender, callbackQuery: CallbackQuery) {
     editMessageText.replyMarkup = InlineKeyboardMarkup(emptyList())
 
     absSender.execute(editMessageText)
+}
+
+fun pairsToString(vararg pairs: Pair<String, String>): String {
+    return pairs.joinToString(";") { "${it.first}=${it.second}" }
+}
+
+fun parseStringToMap(data: String): Map<ArgumentCode, String> {
+    return data.split(";").mapNotNull { pair ->
+        val (key, value) = pair.split("=").let {
+            if (it.size == 2) it else return@mapNotNull null
+        }
+
+        // Преобразуем строку в Enum по значению
+        val enumKey = ArgumentCode.fromValue(key)
+
+        enumKey?.let { it to value }
+    }.toMap()
+}
+
+fun phoneMatchesPattern(phone: String): Boolean {
+    return Regex("8[0-9]{10}").matches(phone)
 }

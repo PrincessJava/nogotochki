@@ -7,10 +7,12 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.createMessage
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.editLastMessage
+import ru.riton.ru.riton.model.enums.ArgumentCode
 import ru.riton.ru.riton.service.AppointmentService
 import ru.riton.ru.riton.service.ScheduleService
 import ru.riton.ru.riton.service.UserService
 import ru.riton.ru.riton.slotDate
+import ru.riton.ru.riton.slotTime
 
 @Component
 class AppointmentHandler(
@@ -19,8 +21,8 @@ class AppointmentHandler(
     private val userService: UserService) : CallbackHandler {
     override val name = HandlerName.APPOINTMENT
 
-    override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: List<String>) {
-        val schedule = scheduleService.getById(arguments.getOrNull(0)?.toIntOrNull())
+    override fun processCallbackData(absSender: AbsSender, callbackQuery: CallbackQuery, arguments: Map<ArgumentCode, String>) {
+        val schedule = scheduleService.getById(arguments[ArgumentCode.SCHEDULE_ID]?.toIntOrNull())
         val tgId = callbackQuery.from.id
         val user = userService.getByTgId(tgId)
 
@@ -29,7 +31,7 @@ class AppointmentHandler(
 
         absSender.execute(createMessage((callbackQuery.message as Message).chat.id.toString(), "Вы успешно записаны к ${schedule.master!!.name} " +
                 slotDate(schedule) +
-                " на ${arguments.getOrNull(1)}"))
-        editLastMessage(absSender, callbackQuery)
+                " на ${slotTime(schedule)}}"))
+//        editLastMessage(absSender, callbackQuery)
     }
 }

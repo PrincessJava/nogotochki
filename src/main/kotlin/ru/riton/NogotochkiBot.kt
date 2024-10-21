@@ -7,12 +7,15 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.riton.ru.riton.config.TelegramProperties
 import ru.riton.ru.riton.handlers.CallbackHandler
+import ru.riton.ru.riton.handlers.MessageHandler
+import ru.riton.ru.riton.model.enums.ArgumentCode
 
 @Component
 class NogotochkiBot(
     private val properties: TelegramProperties,
     commands: Set<BotCommand>,
-    callbackHandlers: Set<CallbackHandler>
+    callbackHandlers: Set<CallbackHandler>,
+    private val messageHandler: MessageHandler
 ) : TelegramLongPollingCommandBot(properties.botToken) {
 
     private lateinit var handlerMapping: Map<String, CallbackHandler>
@@ -32,6 +35,7 @@ class NogotochkiBot(
 
     override fun processNonCommandUpdate(update: Update) {
         if (update.hasMessage()) {
+            messageHandler.processTextMessage(update, this)
 //            do nothing yet
         } else if (update.hasCallbackQuery()) {
             val callbackQuery = update.callbackQuery
@@ -40,14 +44,14 @@ class NogotochkiBot(
             val callbackQueryId = callbackQuery.id
             execute(AnswerCallbackQuery(callbackQueryId))
 
-            val callbackArguments = callbackData.split("|")
-            val callbackHandlerName = callbackArguments.first()
+            val callbackArguments = parseStringToMap(callbackData)
+            val callbackHandlerName = callbackArguments[ArgumentCode.HANDLER_NAME]
 
-            handlerMapping.getValue(callbackHandlerName)
+            handlerMapping.getValue(callbackHandlerName!!)
                 .processCallbackData(
                     this,
                     callbackQuery,
-                    callbackArguments.subList(1, callbackArguments.size)
+                    callbackArguments
                 )
         }
     }

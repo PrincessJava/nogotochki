@@ -57,12 +57,8 @@ interface ScheduleRepository : JpaRepository<ScheduleEntity, Int> {
                 "and s.type = :type " +
                 "and s.capacity > (select COALESCE(COUNT(distinct a.user), 0) from AppointmentEntity a " +
                 "                  where a.slot.id = s.id) " +
-                "and s.description = :service"
+                "and s.description.id = :descriptionId"
     )
-    fun getFreeByRangeAndDescription(@Param("type") type: ScheduleType, @Param("start") start: Timestamp, @Param("finish") finish: Timestamp, @Param("service") service: String): List<ScheduleEntity>
-
-    @Query("select distinct s.description from ScheduleEntity s")
-    fun getDescriptions(): List<String>
-
+    fun getFreeByRangeAndDescription(@Param("type") type: ScheduleType, @Param("start") start: Timestamp, @Param("finish") finish: Timestamp, @Param("descriptionId") descriptionId: Int): List<ScheduleEntity>
 
 }

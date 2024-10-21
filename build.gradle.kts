@@ -46,6 +46,10 @@ dependencies {
     implementation("org.telegram:telegrambotsextensions:6.9.7.1")
 //    implementation("org.telegram:telegrambots-meta:7.7.0")
 
+    implementation("com.fasterxml.jackson.core:jackson-core:2.18.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.0")
+    implementation("org.json:json:20240303")
+
     implementation("org.jetbrains.kotlin.plugin.allopen:org.jetbrains.kotlin.plugin.allopen.gradle.plugin:2.0.20")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
