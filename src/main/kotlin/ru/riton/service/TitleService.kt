@@ -35,6 +35,7 @@ class TitleService(
     @Value("\${text.enter_phone:Введите ваш номер телефона в формате 8XXXXXXXXXX:}") private val enterPhone: String,
     @Value("\${text.enter_wrong_phone:Пожалуйста, введите номер телефона в формате 8XXXXXXXXXX:}") private val enterWrongPhone: String,
     @Value("\${text.registered:Спасибо, вы зарегистрированы!}") private val registered: String,
+    @Value("\${text.already_assigned:Вы уже записаны на это занятие, либо время вашей другой записи пересекается}") private val alreadyAssigned: String,
 
 
     ) {
@@ -109,6 +110,9 @@ class TitleService(
     }
     fun getRegistered(): String {
         return String(registered.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+    fun getAlreadyAssigned(): String {
+        return String(alreadyAssigned.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
 
 }

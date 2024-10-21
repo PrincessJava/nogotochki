@@ -52,9 +52,7 @@ class LogEntryExitAspect {
     @Pointcut(
         "within(ru.riton.ru.riton.repository.*)" +
                 " || within(ru.riton.ru.riton.service.*)" +
-                " || within(ru.riton.ru.riton.controller.*)" +
-                "|| within(ru.riton.ru.riton.commands.*)" +
-                "|| within(ru.riton.ru.riton.handlers.*)"
+                " || within(ru.riton.ru.riton.controller.*)"
     )
     fun applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.

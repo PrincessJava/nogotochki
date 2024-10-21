@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
+import ru.riton.exception.UserException
 import ru.riton.ru.riton.createMessage
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.editLastMessage
@@ -29,17 +30,25 @@ class AppointmentHandler(
         val tgId = callbackQuery.from.id
         val user = userService.getByTgId(tgId)
 
-        appointmentService.checkUserAppointments(userId = user.id, slotId = schedule.id, start = schedule.start, finish = schedule.finish)
-        appointmentService.addAppointment(userId = user.id, slotId = schedule.id)
+        try {
+            appointmentService.checkUserAppointments(userId = user.id, slotId = schedule.id, start = schedule.start, finish = schedule.finish)
+            appointmentService.addAppointment(userId = user.id, slotId = schedule.id)
 
-        absSender.execute(
-            createMessage(
-                (callbackQuery.message as Message).chat.id.toString(), String.format(
-                    titleService.getAssignSuccess(), schedule.master!!.name,
-                    slotDate(schedule), slotTime(schedule), schedule.description!!.value
+            absSender.execute(
+                createMessage(
+                    (callbackQuery.message as Message).chat.id.toString(), String.format(
+                        titleService.getAssignSuccess(), schedule.master!!.name,
+                        slotDate(schedule), slotTime(schedule), schedule.description!!.value
+                    )
                 )
             )
-        )
+        } catch (e: UserException) {
+            absSender.execute(
+                createMessage(
+                    (callbackQuery.message as Message).chat.id.toString(), titleService.getAlreadyAssigned()
+                )
+            )
+        }
 //        editLastMessage(absSender, callbackQuery)
     }
 }

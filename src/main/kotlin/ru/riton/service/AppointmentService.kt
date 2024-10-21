@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Service
 import ru.riton.exception.NoDataFoundException
+import ru.riton.exception.UserException
 import ru.riton.model.AppointmentEntity
 import ru.riton.model.ScheduleEntity
 import ru.riton.model.UserEntity
@@ -39,7 +40,12 @@ class AppointmentService(
         return appointmentRepository.findByUserId(userId)
     }
 
-    fun checkUserAppointments(userId: Int, slotId: Int, start: Timestamp, finish: Timestamp): List<AppointmentEntity> {
-        return appointmentRepository.checkUserAppointments(userId, slotId, start, finish)
+    fun checkUserAppointments(userId: Int, slotId: Int, start: Timestamp, finish: Timestamp) {
+        val appointments = appointmentRepository.checkUserAppointments(userId, slotId, start, finish)
+        if (appointments.isNotEmpty()) {
+            throw UserException("Запись на это занятие или на это время уже есть",
+                String.format("User id=%s has appointment for this slot: %s, or time: %s - %s", userId, slotId, start, finish))
+        }
+
     }
 }

@@ -82,7 +82,7 @@ kotlin {
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("org.springframework.stereotype.Controller")
-    annotation("org.springframework.stereotype.Component")
+//    annotation("org.springframework.stereotype.Component")
     annotation("org.springframework.stereotype.Service")
 
 }
