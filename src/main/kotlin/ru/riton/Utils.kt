@@ -167,7 +167,7 @@ fun editLastMessage(absSender: AbsSender, callbackQuery: CallbackQuery) {
     absSender.execute(editMessageText)
 }
 
-fun pairsToString(vararg pairs: Pair<String, String>): String {
+fun pairsToString(vararg pairs: Pair<String, String?>): String {
     return pairs.joinToString(";") { "${it.first}=${it.second}" }
 }
 

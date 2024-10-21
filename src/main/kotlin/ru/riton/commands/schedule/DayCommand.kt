@@ -19,10 +19,12 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Component
-class DayCommand(private val scheduleService: ScheduleService,
-    private val titleService: TitleService) : BotCommand(CommandName.DAY.text, "") {
+class DayCommand(
+    private val scheduleService: ScheduleService,
+    private val titleService: TitleService
+) : BotCommand(CommandName.DAY.text, "") {
     private val daysMap = WeekDay.toMap()
-    override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
+    override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String?>) {
         val timeCallback = HandlerName.TIME.text
         val weekOffset = arguments.getOrNull(2)?.toIntOrNull() ?: 0 // Определяем смещение недели, 0 по умолчанию
         val service = arguments[0]
@@ -30,7 +32,7 @@ class DayCommand(private val scheduleService: ScheduleService,
         absSender.execute(showMenu(chat, timeCallback, weekOffset, service, master))
     }
 
-    private fun showMenu(chat: Chat, timeCallback: String, weekOffset: Int, service: String, master: String): SendMessage {
+    private fun showMenu(chat: Chat, timeCallback: String, weekOffset: Int, service: String?, master: String?): SendMessage {
         val weekOffsetCallback = HandlerName.WEEK_NAVIGATION.text
         val freeDays = getSlots(weekOffset, service, master)
         if (freeDays.isEmpty()) {
@@ -40,18 +42,20 @@ class DayCommand(private val scheduleService: ScheduleService,
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "previous",
-                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
+                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.DESCRIPTION_ID.text to service,
+                    ArgumentCode.MASTER_ID.text to master
                 ) to titleService.getPrevWeek(),
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "next",
-                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
+                    ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.DESCRIPTION_ID.text to service,
+                    ArgumentCode.MASTER_ID.text to master
                 ) to titleService.getNextWeek()
             )
         )
         return createMessageWithInlineButtons(chat.id.toString(), titleService.getChooseDay(), buttons)
     }
 
-    private fun getSlots(weekOffset: Int, service: String, master: String): List<ScheduleEntity> {
+    private fun getSlots(weekOffset: Int, service: String?, master: String?): List<ScheduleEntity> {
         // Определяем начало и конец недели на основе смещения
         val now = LocalDateTime.now()
         val startOfWeek = if (now.plusWeeks(weekOffset.toLong()).with(DayOfWeek.MONDAY).isBefore(now)) now
