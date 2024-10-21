@@ -5,9 +5,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.MessageSource
 import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import java.util.*
 
-@Component
+@Service
 @PropertySource("classpath:titles/common.properties")
 @PropertySource("classpath:titles/\${app.company.name}.properties")
 class TitleService(

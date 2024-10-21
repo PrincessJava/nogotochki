@@ -4,7 +4,7 @@ import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
 
-class ScheduleDto(
+data class ScheduleDto(
     val masterId: Int,
     val start: Timestamp,
     val finish: Timestamp,

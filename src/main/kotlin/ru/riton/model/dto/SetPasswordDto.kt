@@ -1,6 +1,6 @@
 package ru.riton.ru.riton.model.dto
 
-class SetPasswordDto(
+data class SetPasswordDto(
     var id: Int,
     var password: String
 )

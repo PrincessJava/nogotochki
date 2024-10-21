@@ -29,4 +29,8 @@ open class BasicEntity(
     @Column(name = "id")
     open var id: Int = 0
 
-) : Serializable
+) : Serializable {
+    override fun toString(): String {
+        return "BasicEntity(version=$version, created=$created, modified=$modified, id=$id)"
+    }
+}

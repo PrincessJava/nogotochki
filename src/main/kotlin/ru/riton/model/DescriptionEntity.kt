@@ -18,4 +18,7 @@ class DescriptionEntity(
     @Column(name = "value")
     var value: String? = null
 ) {
+    override fun toString(): String {
+        return "DescriptionEntity(id=$id, value=$value)"
+    }
 }

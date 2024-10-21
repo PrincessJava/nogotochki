@@ -29,4 +29,8 @@ class MastersEntity(
     override fun hashCode(): Int {
         return Objects.hash(id, name)
     }
+
+    override fun toString(): String {
+        return "MastersEntity(name='$name', user=$user)"
+    }
 }

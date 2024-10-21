@@ -40,5 +40,9 @@ class AppointmentEntity : BasicEntity() {
         return result
     }
 
+    override fun toString(): String {
+        return "AppointmentEntity(slot=$slot, user=$user)"
+    }
+
 
 }

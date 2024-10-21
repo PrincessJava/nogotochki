@@ -25,4 +25,8 @@ class PaymentEntity : BasicEntity()  {
     override fun hashCode(): Int {
         return Objects.hash(id, userId, subscriptionId)
     }
+
+    override fun toString(): String {
+        return "PaymentEntity(userId=$userId, subscriptionId=$subscriptionId)"
+    }
 }

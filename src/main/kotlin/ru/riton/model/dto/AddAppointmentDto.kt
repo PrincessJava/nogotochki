@@ -1,6 +1,6 @@
 package ru.riton.ru.riton.model.dto
 
-class AddAppointmentDto(
+data class AddAppointmentDto(
     val userId: Int,
     val slotId: Int
 )

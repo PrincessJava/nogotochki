@@ -32,4 +32,8 @@ class SubscriptionEntity : BasicEntity()  {
     override fun hashCode(): Int {
         return Objects.hash(id, name, validity, operationsCount)
     }
+
+    override fun toString(): String {
+        return "SubscriptionEntity(name=$name, validity=$validity, operationsCount=$operationsCount)"
+    }
 }

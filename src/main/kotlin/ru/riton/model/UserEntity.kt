@@ -54,4 +54,8 @@ class UserEntity(
     override fun hashCode(): Int {
         return Objects.hash(id, name, tgId, phoneNumber)
     }
+
+    override fun toString(): String {
+        return "UserEntity(tgId=$tgId)"
+    }
 }

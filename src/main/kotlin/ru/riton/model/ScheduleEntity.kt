@@ -98,4 +98,8 @@ class ScheduleEntity(
         result = 31 * result + type.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "ScheduleEntity(master=$master, start=$start, finish=$finish, weekDay=$weekDay, location=$location, description=$description, capacity=$capacity, type=$type)"
+    }
 }
