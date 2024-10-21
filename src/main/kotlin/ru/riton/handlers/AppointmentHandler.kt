@@ -35,7 +35,7 @@ class AppointmentHandler(
         absSender.execute(
             createMessage(
                 (callbackQuery.message as Message).chat.id.toString(), String.format(
-                    titleService.assignSuccess, schedule.master!!.name,
+                    titleService.getAssignSuccess(), schedule.master!!.name,
                     slotDate(schedule), slotTime(schedule), schedule.description!!.value
                 )
             )

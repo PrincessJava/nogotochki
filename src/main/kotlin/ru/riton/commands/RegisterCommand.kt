@@ -27,9 +27,9 @@ class RegisterCommand(private val userSessionService: UserSessionService,
         val session = userSessionService.getSession(userId)
 
         if (session.state == UserState.COMPLETE) {
-            absSender.execute(SendMessage(chat.id.toString(), titleService.alreadyRegistered))
+            absSender.execute(SendMessage(chat.id.toString(), titleService.getAlreadyRegistered()))
         } else {
-            absSender.execute(SendMessage(chat.id.toString(), titleService.writeName))
+            absSender.execute(SendMessage(chat.id.toString(), titleService.getWriteName()))
             session.state = UserState.ASKING_NAME
             userSessionService.updateSession(userId, session)
         }

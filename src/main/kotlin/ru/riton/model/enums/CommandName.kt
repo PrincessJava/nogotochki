@@ -4,7 +4,7 @@ enum class CommandName(val text: String) {
     START("start"),
     REGISTER("register"),
     BUY("buy"),
-    SCHEDULE("schedule"),
+    MENU_SERVICE("schedule"),
     INFO("info"),
     ADMIN("admin"),
 

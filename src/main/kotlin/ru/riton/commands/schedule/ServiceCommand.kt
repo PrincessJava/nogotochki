@@ -27,7 +27,7 @@ class ServiceCommand(private val descriptionService: DescriptionService,
 
     private fun showMenu(chat: Chat, callback: String): SendMessage {
         val buttons = getDescriptions(callback)
-        return createMessageWithInlineButtonsRows(chat.id.toString(), titleService.chooseClass, buttons)
+        return createMessageWithInlineButtonsRows(chat.id.toString(), titleService.getChooseClass(), buttons)
     }
 
     private fun getDescriptions(callback: String): List<List<Pair<String, String>>> {

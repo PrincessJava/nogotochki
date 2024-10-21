@@ -11,6 +11,10 @@ app:
 server:
   servlet:
     context-path: /enrollment
+#    encoding:
+#      charset: UTF-8
+#      enabled: true
+#      force: true
 spring:
   profiles:
     active: dev

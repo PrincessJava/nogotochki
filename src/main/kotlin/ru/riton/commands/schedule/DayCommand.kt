@@ -33,21 +33,21 @@ class DayCommand(private val scheduleService: ScheduleService,
         val weekOffsetCallback = HandlerName.WEEK_NAVIGATION.text
         val freeDays = getSlots(weekOffset, service)
         if (freeDays.isEmpty()) {
-            return createMessage(chat.id.toString(), titleService.noFreeSlots)
+            return createMessage(chat.id.toString(), titleService.getNoFreeSlots())
         }
         val buttons = getDaysButtons(timeCallback, freeDays) + listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "previous",
                     ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
-                ) to titleService.prevWeek,
+                ) to titleService.getPrevWeek(),
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to weekOffsetCallback, ArgumentCode.ACTION.text to "next",
                     ArgumentCode.WEEK_OFFSET.text to weekOffset.toString(), ArgumentCode.TEXT.text to service
-                ) to titleService.nextWeek
+                ) to titleService.getNextWeek()
             )
         )
-        return createMessageWithInlineButtons(chat.id.toString(), titleService.chooseDay, buttons)
+        return createMessageWithInlineButtons(chat.id.toString(), titleService.getChooseDay(), buttons)
     }
 
     private fun getSlots(weekOffset: Int, service: String): List<ScheduleEntity> {

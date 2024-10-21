@@ -26,7 +26,7 @@ class TimeCommand(private val scheduleService: ScheduleService,
     private fun showMenu(chat: Chat, time: String): SendMessage {
         val slots = scheduleService.getFreeRegularSlotsByDay(parseDate(time))
         val buttons = getSlotsButtons(slots)
-        return createMessageWithInlineButtons(chat.id.toString(), titleService.chooseTime, buttons)
+        return createMessageWithInlineButtons(chat.id.toString(), titleService.getChooseTime(), buttons)
     }
 
     private fun getSlotsButtons(slots: List<ScheduleEntity>): List<List<Pair<String, String>>> {

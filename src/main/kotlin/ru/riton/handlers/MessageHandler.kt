@@ -31,13 +31,13 @@ class MessageHandler(
                 session.state = UserState.ASKING_PHONE
                 userSessionService.updateSession(userId, session)
 
-                absSender.execute(SendMessage(chatId, titleService.enterPhone))
+                absSender.execute(SendMessage(chatId, titleService.getEnterPhone()))
             }
 
             UserState.ASKING_PHONE -> {
                 val phoneNumber = message.text
                 if (!phoneMatchesPattern(phoneNumber)) {
-                    absSender.execute(SendMessage(chatId, titleService.enterWrongPhone))
+                    absSender.execute(SendMessage(chatId, titleService.getEnterWrongPhone()))
                 } else {
                     session.phoneNumber = phoneNumber
                     session.state = UserState.COMPLETE
@@ -46,12 +46,12 @@ class MessageHandler(
                     saveOrUpdateUser(session, userId)
                     userSessionService.clearSession(userId)
 
-                    absSender.execute(SendMessage(chatId, titleService.registered))
+                    absSender.execute(SendMessage(chatId, titleService.getRegistered()))
                 }
             }
 
             UserState.COMPLETE -> {
-                absSender.execute(SendMessage(chatId, titleService.alreadyRegistered))
+                absSender.execute(SendMessage(chatId, titleService.getAlreadyRegistered()))
             }
         }
     }

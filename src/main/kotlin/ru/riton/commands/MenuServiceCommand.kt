@@ -16,7 +16,7 @@ import ru.riton.ru.riton.service.UserService
 
 @Component
 class MenuServiceCommand(private val userService: UserService,
-    private val titleService: TitleService) : BotCommand(CommandName.SCHEDULE.text, "") {
+    private val titleService: TitleService) : BotCommand(CommandName.MENU_SERVICE.text, "") {
     override fun execute(absSender: AbsSender, user: User, chat: Chat, arguments: Array<out String>) {
         absSender.execute(showMenu(chat, user))
     }
@@ -25,13 +25,13 @@ class MenuServiceCommand(private val userService: UserService,
         if (!userService.userExistsByTgId(user.id)) {
             return createMessageWithInlineButtons(
                 chat.id.toString(),
-                titleService.notRegistered,
+                titleService.getNotRegistered(),
                 listOf(
                     listOf(
                         pairsToString(
                             ArgumentCode.HANDLER_NAME.text to HandlerName.REGISTER.text,
                             ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text
-                        ) to titleService.register
+                        ) to titleService.getRegister()
                     )
                 )
             )
@@ -44,17 +44,17 @@ class MenuServiceCommand(private val userService: UserService,
 
         return createMessageWithInlineButtons(
             chat.id.toString(),
-            titleService.chooseAssign,
+            titleService.getChooseAssign(),
             listOf(
                 listOf(
                     pairsToString(
                         ArgumentCode.HANDLER_NAME.text to serviceCallback,
                         ArgumentCode.COMMAND_NAME.text to serviceCommand
-                    ) to titleService.onClass,
+                    ) to titleService.getOnClass(),
                     pairsToString(
                         ArgumentCode.HANDLER_NAME.text to masterCallback,
                         ArgumentCode.COMMAND_NAME.text to masterCommand
-                    ) to titleService.toMaster
+                    ) to titleService.getToMaster()
                 )
             )
         )

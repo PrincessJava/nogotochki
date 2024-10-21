@@ -36,27 +36,27 @@ class StartCommand(
         callback: String
     ) = createMessageWithInlineButtons(
         chat.id.toString(),
-        String.format(titleService.greeting, user.firstName),
+        String.format(titleService.getGreeting(), user.firstName),
         listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
                     ArgumentCode.COMMAND_NAME.text to CommandName.BUY.text
-                ) to titleService.buy,
+                ) to titleService.getBuy(),
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
-                    ArgumentCode.COMMAND_NAME.text to CommandName.SERVICE.text
-                ) to titleService.assign
+                    ArgumentCode.COMMAND_NAME.text to CommandName.MENU_SERVICE.text
+                ) to titleService.getAssign()
             ),
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
                     ArgumentCode.COMMAND_NAME.text to CommandName.INFO.text
-                ) to titleService.info,
+                ) to titleService.getInfo(),
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
                     ArgumentCode.COMMAND_NAME.text to CommandName.ADMIN.text
-                ) to titleService.admin
+                ) to titleService.getAdmin()
             ),
         )
     )
@@ -67,13 +67,13 @@ class StartCommand(
         callback: String
     ) = createMessageWithInlineButtons(
         chat.id.toString(),
-        String.format(titleService.greeting, user.firstName),
+        String.format(titleService.getGreeting(), user.firstName),
         listOf(
             listOf(
                 pairsToString(
                     ArgumentCode.HANDLER_NAME.text to callback,
                     ArgumentCode.COMMAND_NAME.text to CommandName.REGISTER.text
-                ) to titleService.register
+                ) to titleService.getRegister()
             )
         )
     )
