@@ -61,7 +61,7 @@ liquibase {
         register("main") {
             this.arguments = mapOf(
                 "changeLogFile" to "classpath:migrations/changelog.xml",
-                "url" to "jdbc:postgresql://localhost:5432/nogotochki",
+                "url" to "jdbc:postgresql://db:5432/nogotochki",
                 "username" to "riton",
                 "password" to "riton",
                 "driver" to "org.postgresql.Driver"

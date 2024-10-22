@@ -99,6 +99,13 @@ $$
         <dropColumn tableName="masters" columnName="org_id"/>
     </changeSet>
 
+    <changeSet id="remove_org_id_from_user" author="riton">
+        <preConditions>
+            <columnExists tableName="user" columnName="org_id"/>
+        </preConditions>
+        <dropColumn tableName="user" columnName="org_id"/>
+    </changeSet>
+
     <changeSet id="add_user_id_to_masters" author="riton">
         <preConditions>
             <not>
