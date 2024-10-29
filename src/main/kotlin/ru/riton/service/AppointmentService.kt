@@ -3,8 +3,8 @@ package ru.riton.ru.riton.service
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Service
-import ru.riton.exception.NoDataFoundException
-import ru.riton.exception.UserException
+import ru.riton.ru.riton.exception.NoDataFoundException
+import ru.riton.ru.riton.exception.UserException
 import ru.riton.model.AppointmentEntity
 import ru.riton.model.ScheduleEntity
 import ru.riton.model.UserEntity

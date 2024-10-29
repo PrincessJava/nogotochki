@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.bots.AbsSender
 import ru.riton.ru.riton.phoneMatchesPattern
 import ru.riton.ru.riton.model.UserSession
-import ru.riton.ru.riton.model.dto.UserDto
+import ru.riton.ru.riton.model.dto.UserRequest
 import ru.riton.ru.riton.model.enums.UserState
 import ru.riton.ru.riton.service.TitleService
 import ru.riton.ru.riton.service.UserService
@@ -60,7 +60,7 @@ class MessageHandler(
         if (userService.existsByPhoneNumber(session.phoneNumber!!)) {
             userService.addTgId(session.phoneNumber!!, userId)
         }
-        val user = UserDto(name = session.name!!, phoneNumber = session.phoneNumber!!, tgId = userId)
+        val user = UserRequest(name = session.name!!, phone = session.phoneNumber!!, tgId = userId)
         userService.addUser(user)
     }
 }

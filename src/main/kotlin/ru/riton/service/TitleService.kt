@@ -6,12 +6,14 @@ import org.springframework.context.MessageSource
 import org.springframework.context.annotation.PropertySource
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import ru.riton.ru.riton.model.dto.MenuItemsDto
 import java.util.*
 
 @Service
 @PropertySource("classpath:titles/common.properties")
 @PropertySource("classpath:titles/\${app.company.name}.properties")
 class TitleService(
+    @Value("\${app.company.name}") private val company: String,
     @Value("\${text.no_free_slots:Нет свободных слотов}") private val noFreeSlots: String,
     @Value("\${button.previous_week:Пред. неделя}") private val prevWeek: String,
     @Value("\${button.next_week:След. неделя}") private val nextWeek: String,
@@ -36,7 +38,10 @@ class TitleService(
     @Value("\${text.enter_wrong_phone:Пожалуйста, введите номер телефона в формате 8XXXXXXXXXX:}") private val enterWrongPhone: String,
     @Value("\${text.registered:Спасибо, вы зарегистрированы!}") private val registered: String,
     @Value("\${text.already_assigned:Вы уже записаны на это занятие, либо время вашей другой записи пересекается}") private val alreadyAssigned: String,
-
+    @Value("\${text.master:Мастер}") private val master: String,
+    @Value("\${text.masters:Мастера}") private val masters: String,
+    @Value("\${text.master_list:Список мастеров}") private val masterList: String,
+    @Value("\${text.add_master:Добавить мастера}") private val addMaster: String,
 
     ) {
 
@@ -47,15 +52,19 @@ class TitleService(
     fun getNoFreeSlots(): String {
         return String(noFreeSlots.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getPrevWeek(): String {
         return String(prevWeek.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getNextWeek(): String {
         return String(nextWeek.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getChooseDay(): String {
         return String(chooseDay.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getChooseClass(): String {
         return String(chooseClass.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
@@ -63,56 +72,94 @@ class TitleService(
     fun getChooseMaster(): String {
         return String(chooseMaster.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getChooseTime(): String {
         return String(chooseTime.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getNotRegistered(): String {
         return String(notRegistered.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getRegister(): String {
         return String(register.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getChooseAssign(): String {
         return String(chooseAssign.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getOnClass(): String {
         return String(onClass.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getToMaster(): String {
         return String(toMaster.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getAlreadyRegistered(): String {
         return String(alreadyRegistered.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getWriteName(): String {
         return String(writeName.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getBuy(): String {
         return String(buy.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getAssign(): String {
         return String(assign.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getInfo(): String {
         return String(info.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getAdmin(): String {
         return String(admin.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getAssignSuccess(): String {
         return String(assignSuccess.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getEnterPhone(): String {
         return String(enterPhone.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getEnterWrongPhone(): String {
         return String(enterWrongPhone.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getRegistered(): String {
         return String(registered.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
+
     fun getAlreadyAssigned(): String {
         return String(alreadyAssigned.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
     }
 
+    fun getMaster(): String {
+        return String(master.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+
+    fun getMasters(): String {
+        return String(masters.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+
+    fun getMasterList(): String {
+        return String(masterList.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+
+    fun getAddMaster(): String {
+        return String(addMaster.toByteArray(charset("ISO-8859-1")), charset("UTF-8"))
+    }
+
+
+    fun getMenuItems(): MenuItemsDto {
+        return MenuItemsDto(//company,
+            MenuItemsDto.Labels(master, masters, masterList, addMaster))
+    }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import ru.riton.model.ScheduleEntity
+import ru.riton.ru.riton.model.dto.ScheduleResponse
 import ru.riton.ru.riton.model.enums.ScheduleType
 import ru.riton.ru.riton.model.enums.WeekDay
 import java.sql.Timestamp
@@ -60,6 +61,18 @@ interface ScheduleRepository : JpaRepository<ScheduleEntity, Int>, ScheduleRepos
                 "and s.description.id = :descriptionId " +
                 "and s.master.id = :masterId"
     )
-    fun getFreeByRangeAndDescription(@Param("type") type: ScheduleType, @Param("start") start: Timestamp, @Param("finish") finish: Timestamp, @Param("descriptionId") descriptionId: Int, @Param("masterId") masterId: Int): List<ScheduleEntity>
+    fun getFreeByRangeAndDescription(
+        @Param("type") type: ScheduleType,
+        @Param("start") start: Timestamp,
+        @Param("finish") finish: Timestamp,
+        @Param("descriptionId") descriptionId: Int,
+        @Param("masterId") masterId: Int
+    ): List<ScheduleEntity>
+
+    @Query(
+        "select new ru.riton.ru.riton.model.dto.ScheduleResponse(s.id, s.start, s.finish, s.location, s.description.value, s.capacity, s.type, s.master.name) from ScheduleEntity s " +
+                "where s.start between :start and :finish "
+    )
+    fun getAllByStartAndFinish(@Param("start") start: Timestamp, @Param("finish") finish: Timestamp): List<ScheduleResponse>?
 
 }

@@ -34,7 +34,11 @@ class UserEntity(
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
     )
-    private val roles: Collection<RoleEntity>? = null
+    private val roles: MutableSet<RoleEntity> = mutableSetOf()
+
+    fun addRole(role: RoleEntity) {
+        roles.add(role)
+    }
 
     fun setPassword(password: String, passwordEncoder: PasswordEncoder) {
         this.password = passwordEncoder.encode(password)

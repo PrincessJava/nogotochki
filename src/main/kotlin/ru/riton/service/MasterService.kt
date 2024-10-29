@@ -1,10 +1,10 @@
 package ru.riton.ru.riton.service
 
 import org.springframework.stereotype.Service
-import ru.riton.exception.UserException
+import ru.riton.ru.riton.exception.UserException
 import ru.riton.model.MastersEntity
 import ru.riton.model.UserEntity
-import ru.riton.ru.riton.model.dto.UserDto
+import ru.riton.ru.riton.model.dto.UserRequest
 import ru.riton.ru.riton.repository.MasterRepository
 
 @Service
@@ -13,9 +13,9 @@ class MasterService(
     private val userService: UserService
 ) {
 
-    fun addMaster(userDto: UserDto): MastersEntity { //todo refactor
+    fun addMaster(userRequest: UserRequest): MastersEntity { //todo refactor
         var user: UserEntity? = null
-        val phone = userDto.phoneNumber
+        val phone = userRequest.phone
 
         if (userService.existsByPhoneNumber(phone)) {
             user = userService.getUser(phone)
@@ -26,7 +26,7 @@ class MasterService(
                 )
             }
         } else {
-            user = userService.addUser(userDto)
+            user = userService.addUser(userRequest)
         }
 
         val master = MastersEntity(user.name)

@@ -1,17 +1,19 @@
 package ru.riton.model
 
 import jakarta.persistence.*
+import ru.riton.ru.riton.model.enums.Role
 
 @Entity
 @Table(name = "role", schema = "public", catalog = "nogotochki")
-open class RoleEntity {
+class RoleEntity {
     @Id
     @Column(name = "id", nullable = false, insertable = false, updatable = false)
     var id: Int? = null
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @get:Column(name = "name", nullable = false)
-    var name: String? = null
+    var name: Role? = null
 
     @ManyToMany(mappedBy = "roles", targetEntity = UserEntity::class)
     var users: List<UserEntity> = mutableListOf()

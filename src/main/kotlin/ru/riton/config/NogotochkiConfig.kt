@@ -21,4 +21,6 @@ open class NogotochkiConfig {
     open fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
+
+
 }

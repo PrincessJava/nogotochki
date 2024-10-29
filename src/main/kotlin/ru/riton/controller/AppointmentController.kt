@@ -3,9 +3,7 @@ package ru.riton.ru.riton.controller
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.riton.model.AppointmentEntity
-import ru.riton.model.ScheduleEntity
 import ru.riton.ru.riton.model.dto.AddAppointmentDto
-import ru.riton.ru.riton.model.dto.ScheduleDto
 import ru.riton.ru.riton.service.AppointmentService
 
 @RestController

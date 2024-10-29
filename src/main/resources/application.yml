@@ -17,12 +17,7 @@ server:
 #      force: true
 spring:
   profiles:
-    active: dev
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/nogotochki
-    password: riton
-    username: riton
+    active: local
   jpa:
     hibernate:
       ddl-auto: validate

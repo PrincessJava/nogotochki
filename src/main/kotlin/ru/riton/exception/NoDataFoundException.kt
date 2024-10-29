@@ -1,4 +1,4 @@
-package ru.riton.exception
+package ru.riton.ru.riton.exception
 
 import java.lang.RuntimeException
 

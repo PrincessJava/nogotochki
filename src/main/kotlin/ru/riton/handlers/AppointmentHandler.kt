@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.bots.AbsSender
-import ru.riton.exception.UserException
+import ru.riton.ru.riton.exception.UserException
 import ru.riton.ru.riton.createMessage
 import ru.riton.ru.riton.model.enums.HandlerName
 import ru.riton.ru.riton.editLastMessage
