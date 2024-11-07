@@ -1,0 +1,20 @@
+name: Trigger Deploy in Main Repository
+
+on:
+  push:
+    branches:
+      - master  # Ветка, отслеживаемая в зависимости
+
+jobs:
+  trigger-main-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send dispatch event to main repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.everest-preview+json" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            https://api.github.com/repos/PrincessJava/enrollment-project/dispatches \
+            -d '{"event_type": "deploy_trigger"}'
