@@ -9,7 +9,7 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-.idea
+/.idea
 *.iws
 *.iml
 *.ipr
@@ -17,7 +17,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-.gigaide
+/.gigaide
 
 ### Eclipse ###
 .apt_generated
