@@ -12,12 +12,16 @@ jobs:
     steps:
       - name: Get Last Commit Message
         id: vars
-        run: echo "::set-output name=commit_message::$(git log -1 --pretty=%B)"
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message extracted: $COMMIT_MSG"
+          echo "::set-output name=commit_message::$COMMIT_MSG"
 
       - name: Send dispatch event to main repository
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
+          echo "Sending commit message: ${{ steps.vars.outputs.commit_message }}"
           curl -X POST -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
             https://api.github.com/repos/PrincessJava/enrollment-project/dispatches \
