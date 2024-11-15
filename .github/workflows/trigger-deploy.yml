@@ -3,7 +3,7 @@ name: Trigger Deploy in Main Repository
 on:
   push:
     branches:
-      - master  # Ветка, отслеживаемая в зависимости
+      - master
 
 jobs:
   trigger-main-repo:
@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Get Last Commit Message
         id: vars
-        run: |
-          echo "commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+        run: echo "::set-output name=commit_message::$(git log -1 --pretty=%B)"
+
       - name: Send dispatch event to main repository
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -21,4 +21,4 @@ jobs:
           curl -X POST -H "Accept: application/vnd.github.everest-preview+json" \
             -H "Authorization: token $GITHUB_TOKEN" \
             https://api.github.com/repos/PrincessJava/enrollment-project/dispatches \
-            -d "{\"event_type\": \"deploy_trigger\", \"client_payload\": {\"commit_message\": \"${{ env.commit_message }}\"}}"
+            -d "{\"event_type\": \"deploy_trigger\", \"client_payload\": {\"commit_message\": \"${{ steps.vars.outputs.commit_message }}\"}}"
